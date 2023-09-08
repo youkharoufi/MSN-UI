@@ -1,0 +1,53 @@
+
+<p-toolbar>
+  <div class="p-toolbar-group-start"></div>
+  <div class="p-toolbar-group-end">
+    <p-toast></p-toast>
+
+    <p-splitButton
+      label="User"
+      [model]="userDropdown"
+      icon="pi pi-prime"
+      styleClass="p-button-help"
+    ></p-splitButton>
+
+  </div>
+</p-toolbar>
+
+    <p-toast></p-toast>
+    <form autocomplete="off">
+      <p-dialog [(visible)]="visible">
+
+
+        <div style="display:flex; flex-direction:column; align-items: flex-start; margin-left:5px;">
+          <div>
+            <h3>Okay ! Let's get you signed in </h3>
+
+          </div>
+          <div>
+            <span>
+              <label style="display:block; align-items: flex-start;" htmlFor="username">Username Or Email</label>
+              <input pInputText id="username" [(ngModel)]="loginUser.UserNameOrEmail" name="usernameOrEmail" autocomplete="off"/>
+
+            </span>
+
+          </div>
+
+          <div>
+            <label style="display:block; align-items: flex-start;" htmlFor="password">Password</label>
+              <p-password id="password" [(ngModel)]="loginUser.Password" [toggleMask]="true" name="password" autocomplete="off"></p-password>
+          </div>
+
+          <div style="margin-left:165px; margin-top: 20px;">
+            <button pButton pRipple label="Login" (click)="login()" class="p-button-success"></button>
+          </div>
+        </div>
+
+
+      </p-dialog>
+
+    </form>
+
+
+
+

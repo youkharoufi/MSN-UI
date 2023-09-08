@@ -1,0 +1,31 @@
+{
+  "name": "pime-ng",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "pime-ng/src",
+  "prefix": "msn-ui",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "pime-ng/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["pime-ng/**/*.ts", "pime-ng/**/*.html"]
+      }
+    }
+  }
+}
