@@ -16,7 +16,7 @@
 
     <p-toast></p-toast>
     <form autocomplete="off">
-      <p-dialog [(visible)]="visible">
+      <p-dialog [(visible)]="loginDialog">
 
 
         <div style="display:flex; flex-direction:column; align-items: flex-start; margin-left:5px;">
@@ -48,6 +48,61 @@
 
     </form>
 
+
+    <p-dialog [(visible)]="registerDialog">
+
+
+      <div style="display:flex; flex-direction:column; align-items: flex-start; margin-left:5px;">
+        <div>
+          <h3>Okay ! Let's get you registered </h3>
+
+        </div>
+        <div>
+          <span>
+            <label style="display:block; align-items: flex-start;" htmlFor="username">Username</label>
+            <input pInputText id="username" [(ngModel)]="registerUser.userName" name="usernameOrEmail" autocomplete="off"/>
+
+          </span>
+
+        </div>
+
+        <div>
+          <span>
+            <label style="display:block; align-items: flex-start;" htmlFor="email">Email</label>
+            <input pInputText id="email" [(ngModel)]="registerUser.email" name="usernameOrEmail" autocomplete="off"/>
+
+          </span>
+
+        </div>
+
+        <div>
+          <label style="display:block; align-items: flex-start;" htmlFor="password">Password</label>
+            <p-password id="password" [(ngModel)]="registerUser.password" [toggleMask]="true" name="password" autocomplete="off"></p-password>
+        </div>
+
+        <div>
+          <label style="display:block; align-items: flex-start;" htmlFor="passwordConfirmation">Password Confirmation</label>
+            <p-password id="passwordConfirmation" [(ngModel)]="passwordConfirmation" [toggleMask]="true" name="passwordConfirmation" autocomplete="off"></p-password>
+        </div>
+
+        <div>
+          <label style="display:block; align-items: flex-start;" htmlFor="role">Role</label>
+          <p-dropdown id="role" [options]="roles" [(ngModel)]="role" optionLabel="name"></p-dropdown>
+        </div>
+
+        <div>
+          <label style="display:block; align-items: flex-start;" htmlFor="fileSelector">Upload your profile picture</label>
+          <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" (onSelect)="onFileSelect($event)"></p-fileUpload>
+        </div>
+
+
+        <div style="margin-left:165px; margin-top: 20px;">
+          <button pButton pRipple label="Login" (click)="register()" class="p-button-success"></button>
+        </div>
+      </div>
+
+
+    </p-dialog>
 
 
 

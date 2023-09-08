@@ -33,7 +33,7 @@ export const loginAccountFailure = createAction(
 
 export const registerAccount = createAction(
   AccountActionsTypes.REGISTER_ACCOUNT,
-  props<{ registerUser: ApplicationUser }>()
+  props<{ registerUser: FormData }>()
 );
 
 export const registerAccountSuccess = createAction(

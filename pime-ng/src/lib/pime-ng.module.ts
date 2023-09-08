@@ -9,6 +9,8 @@ import { MessagesModule } from 'primeng/messages';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   imports: [
@@ -22,6 +24,8 @@ import { DialogModule } from 'primeng/dialog';
     PasswordModule,
     InputTextModule,
     DialogModule,
+    DropdownModule,
+    FileUploadModule
   ],
   exports: [
     ToolbarModule,
@@ -33,6 +37,8 @@ import { DialogModule } from 'primeng/dialog';
     PasswordModule,
     InputTextModule,
     DialogModule,
+    DropdownModule,
+    FileUploadModule
   ],
 })
 export class PimeNgModule {}

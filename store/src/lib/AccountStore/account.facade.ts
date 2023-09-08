@@ -20,7 +20,7 @@ export class AccountFacade {
     this.store.dispatch(loginAccount({loginUser}));
   }
 
-  register(registerUser: ApplicationUser) {
+  register(registerUser: FormData) {
     this.store.dispatch(registerAccount({ registerUser }));
   }
 

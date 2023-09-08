@@ -6,10 +6,10 @@ import { createReducer, on, Action } from '@ngrx/store';
 
 export const ACCOUNT_FEATURE_KEY = 'account-key';
 
-export interface State extends EntityState<ApplicationUser> {
-  selectedId?: string | number; // which Bookmarks record has been selected
-  loaded: boolean; // has the Bookmarks list been loaded
-  error?: Error | null; // last known error (if any)
+export interface State extends EntityState<ApplicationUser | FormData> {
+  selectedId?: string | number;
+  loaded: boolean;
+  error?: Error | null;
   user?: ApplicationUser
 }
 
@@ -17,8 +17,8 @@ export interface AccountPartialState {
   readonly [ACCOUNT_FEATURE_KEY]: State;
 }
 
-export const accountAdapter: EntityAdapter<ApplicationUser> =
-  createEntityAdapter<ApplicationUser>();
+export const accountAdapter: EntityAdapter<ApplicationUser | FormData> =
+  createEntityAdapter<ApplicationUser | FormData>();
 
 export const initialState: State = accountAdapter.getInitialState({
   // set initial required properties
@@ -58,6 +58,9 @@ export const accountReducer = createReducer(
     ...state,
     error,
   })),
+
+
+
 );
 
 export function reducer(state: State | undefined, action: Action) {

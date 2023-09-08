@@ -21,7 +21,8 @@ export class AccountService {
     return this.http.post<ApplicationUser>(this.baseUrl + "account/login", loginUser);
   }
 
-  register(registerUser: ApplicationUser): Observable<ApplicationUser> {
+  register(registerUser: FormData): Observable<ApplicationUser> {
+
     return this.http.post<ApplicationUser>(this.baseUrl + "account/register", registerUser);
   }
 
