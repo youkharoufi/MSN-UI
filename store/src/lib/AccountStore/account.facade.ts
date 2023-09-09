@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { Update } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 
-import { loginAccount, registerAccount } from './account.actions';
+import { confirmAccount, loginAccount, registerAccount } from './account.actions';
 import * as fromAccount from './account.reducers';
 import * as AccountSelectors from './account.selectors';
 import { ApplicationUser } from '../Entities/applicationUser';
 import { LoginUser } from '../Entities/loginUser';
+import { ConfirmationEmail } from '../Entities/emailConfirmation';
 
 @Injectable({ providedIn: 'root' })
 export class AccountFacade {
@@ -22,6 +23,10 @@ export class AccountFacade {
 
   register(registerUser: FormData) {
     this.store.dispatch(registerAccount({ registerUser }));
+  }
+
+  confirmationEmail(confEmail:ConfirmationEmail){
+    this.store.dispatch(confirmAccount({confEmail}))
   }
 
 

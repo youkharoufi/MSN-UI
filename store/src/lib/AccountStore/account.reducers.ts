@@ -59,6 +59,19 @@ export const accountReducer = createReducer(
     error,
   })),
 
+  on(AccountActions.confirmAccount, (state, { confEmail }) => ({
+    ...state,
+    loaded: false,
+    error: null,
+    confEmail
+  })),
+  on(AccountActions.confirmAccountSuccess, (state, { user }) =>
+    ({ ...state, loaded: true, user })
+  ),
+  on(AccountActions.confirmAccountFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
 
 
 );

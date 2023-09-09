@@ -59,6 +59,8 @@ export class MainPageComponent {
 
   passwordConfirmation = '';
 
+  fileValidation = [''];
+
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
@@ -83,15 +85,25 @@ export class MainPageComponent {
   }
 
   onFileSelect(event: any) {
+
+    this.fileValidation = [];
+
     if (event && event.files && event.files.length > 0) {
       this.registerUser.file = event.files[0];
+      console.log(this.registerUser.file?.type)
+    }else{
+      this.fileValidation.push("The picture is required to register")
+    }
+
+    if(this.registerUser.file?.type !== 'image/jpeg' && this.registerUser.file?.type !== 'image/png' && this.registerUser.file?.type !== 'image/webp'){
+      this.fileValidation.push("Your file needs to be either : jpeg, png or webp to be uploaded")
     }
   }
 
   register() {
 
     this.registerUser.role = this.role.name;
-    this.registerUser.link = window.location.protocol + '//' + window.location.host + "/email-confirmation/search?email=" + this.registerUser.email + "&token="
+    this.registerUser.link = window.location.protocol + '//' + window.location.host + "/email-confirmation?email=" + this.registerUser.email + "&token="
 
     console.log(this.registerUser.file);
     const formData = new FormData();

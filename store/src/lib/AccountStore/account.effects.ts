@@ -1,3 +1,4 @@
+import { ConfirmationEmail } from './../Entities/emailConfirmation';
 import { environment } from './../../../../apps/msn-ui/src/environments/environment';
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
@@ -55,6 +56,23 @@ export class AccountEffects {
           ),
           catchError((error) =>
             of(AccountActions.registerAccountFailure({ error }))
+          )
+
+        )
+      )
+    )
+  );
+
+  confirm$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.confirmAccount),
+      switchMap((action) =>
+        this.backend.emailConfirmation(action.confEmail).pipe(
+          map((user:ApplicationUser ) =>
+            AccountActions.confirmAccountSuccess({ user })
+          ),
+          catchError((error) =>
+            of(AccountActions.confirmAccountFailure({ error }))
           )
 
         )

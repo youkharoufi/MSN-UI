@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { ApplicationUser } from "../Entities/applicationUser";
 import { LoginUser } from "../Entities/loginUser";
+import { ConfirmationEmail } from "../Entities/emailConfirmation";
 
 
 
@@ -14,6 +15,9 @@ export enum AccountActionsTypes {
   REGISTER_ACCOUNT_SUCCESS = '[Account/API] Register Account Success',
   REGISTER_ACCOUNT_ERROR = '[Account/API] Register Account Failure',
 
+  CONFIRM_ACCOUNT = '[Account] Confirm',
+  CONFIRM_ACCOUNT_SUCCESS = '[Account/API] Confirm Account Success',
+  CONFIRM_ACCOUNT_ERROR = '[Account/API] Confirm Account Failure',
 }
 
 export const loginAccount = createAction(
@@ -43,6 +47,21 @@ export const registerAccountSuccess = createAction(
 
 export const registerAccountFailure = createAction(
   AccountActionsTypes.REGISTER_ACCOUNT_ERROR,
+  props<{ error: Error | any }>()
+);
+
+export const confirmAccount = createAction(
+  AccountActionsTypes.CONFIRM_ACCOUNT,
+  props<{ confEmail: ConfirmationEmail }>()
+);
+
+export const confirmAccountSuccess = createAction(
+  AccountActionsTypes.CONFIRM_ACCOUNT_SUCCESS,
+  props<{ user: ApplicationUser }>()
+);
+
+export const confirmAccountFailure = createAction(
+  AccountActionsTypes.CONFIRM_ACCOUNT_ERROR,
   props<{ error: Error | any }>()
 );
 

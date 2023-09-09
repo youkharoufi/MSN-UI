@@ -12,13 +12,20 @@ import { PimeNgModule } from '@msn-ui/pime-ng';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 
-const routes : Routes = [
-  {path:'', component:MainPageComponent}
-]
+const routes: Routes = [
+  { path: '', component: MainPageComponent },
+  { path: 'email-confirmation', component: EmailConfirmationComponent },
+];
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, MainPageComponent],
+  declarations: [
+    AppComponent,
+    NxWelcomeComponent,
+    MainPageComponent,
+    EmailConfirmationComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -28,10 +35,9 @@ const routes : Routes = [
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     HttpClientModule,
-    FormsModule
-
+    FormsModule,
   ],
-  providers:[ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
