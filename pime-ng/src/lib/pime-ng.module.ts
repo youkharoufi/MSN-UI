@@ -11,6 +11,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TabViewModule } from 'primeng/tabview';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   imports: [
@@ -25,7 +27,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputTextModule,
     DialogModule,
     DropdownModule,
-    FileUploadModule
+    FileUploadModule,
+    TabViewModule,
+    CardModule
   ],
   exports: [
     ToolbarModule,
@@ -38,7 +42,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputTextModule,
     DialogModule,
     DropdownModule,
-    FileUploadModule
+    FileUploadModule,
+    TabViewModule,
+    CardModule
   ],
 })
 export class PimeNgModule {}

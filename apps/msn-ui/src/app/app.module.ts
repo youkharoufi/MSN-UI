@@ -13,6 +13,7 @@ import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
+import { MenuComponent } from './menu/menu.component';
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
     NxWelcomeComponent,
     MainPageComponent,
     EmailConfirmationComponent,
+    MenuComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,15 @@ export const getAccountState = createFeatureSelector<State>(ACCOUNT_FEATURE_KEY)
 const { selectAll, selectEntities } = accountAdapter.getSelectors();
 
 
+export const selectConnectedUser = createSelector(
+  getAccountState,
+  (state: State) => state.connectedUser
+);
 
+export const selectByUsername = createSelector(
+  getAccountState,
+  (state: State) => state.byUsernameUser
+);
 
 export const getUser = createSelector(
   getAccountState,

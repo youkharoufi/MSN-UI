@@ -8,7 +8,9 @@ import * as fromAccounts from './AccountStore/account.reducers';
 import { AccountEffects } from './AccountStore/account.effects';
 import { ACCOUNT_API_ENDPOINT } from './AccountStore/account.token';
 
-
+import * as fromMessages from './MessageStore/message.reducers';
+import { MessageEffects } from './MessageStore/message.effects';
+import { MESSAGE_API_ENDPOINT } from './MessageStore/message.token';
 
 
 
@@ -21,9 +23,16 @@ import { ACCOUNT_API_ENDPOINT } from './AccountStore/account.token';
       fromAccounts.reducer
     ),
     EffectsModule.forFeature([AccountEffects]),
+
+    StoreModule.forFeature(
+      fromMessages.MESSAGE_FEATURE_KEY,
+      fromMessages.reducer
+    ),
+    EffectsModule.forFeature([MessageEffects]),
   ],
   providers: [
     { provide: ACCOUNT_API_ENDPOINT, useValue: '' },
+    { provide: MESSAGE_API_ENDPOINT, useValue: '' },
   ],
 })
 export class MsnDomainModule {}

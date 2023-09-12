@@ -13,6 +13,7 @@
     "@angular/platform-browser": "~16.2.0",
     "@angular/platform-browser-dynamic": "~16.2.0",
     "@angular/router": "~16.2.0",
+    "@microsoft/signalr": "^7.0.10",
     "@ngrx/effects": "^16.2.0",
     "@ngrx/entity": "^16.2.0",
     "@ngrx/store": "^16.2.0",

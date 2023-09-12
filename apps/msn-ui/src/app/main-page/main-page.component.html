@@ -41,7 +41,7 @@
           </div>
 
           <div style="margin-left:165px; margin-top: 20px;">
-            <button pButton pRipple label="Login" (click)="login()" class="p-button-success"></button>
+            <button [disabled]="loginForm.invalid" pButton pRipple label="Login" (click)="login()" class="p-button-success"></button>
           </div>
         </div>
 
@@ -110,7 +110,7 @@
 
 
           <div style="display:flex; justify-content:end; margin-top: 20px;">
-            <button pButton pRipple label="Login" (click)="register()" class="p-button-success"></button>
+            <button [disabled]="registerForm.invalid" pButton pRipple label="Signup" (click)="register()" class="p-button-success"></button>
           </div>
 
       </form>
@@ -121,4 +121,4 @@
     </p-dialog>
 
 
-
+    <msn-ui-menu></msn-ui-menu>

@@ -7,4 +7,5 @@ export interface ApplicationUser {
   photoUrl?:string;
   file?:File;
   role:string;
+  friends?:ApplicationUser[];
 }

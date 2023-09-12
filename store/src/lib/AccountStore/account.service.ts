@@ -1,3 +1,4 @@
+import { connectedUser } from './account.actions';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
@@ -29,6 +30,18 @@ export class AccountService {
 
   emailConfirmation(confEmail:ConfirmationEmail): Observable<ApplicationUser>{
     return this.http.post<ApplicationUser>(this.baseUrl+'account/email-confirmation', confEmail);
+  }
+
+  getAllUsers(): Observable<ApplicationUser[]>{
+    return this.http.get<ApplicationUser[]>(this.baseUrl+"account/all-users");
+  }
+
+  connectedUser(): Observable<ApplicationUser>{
+    return this.http.get<ApplicationUser>(this.baseUrl+"account/current-user");
+  }
+
+  getUserByUsername(userName:string): Observable<ApplicationUser>{
+    return this.http.get<ApplicationUser>(this.baseUrl+"account/get-user-by-username/"+userName);
   }
 
 }

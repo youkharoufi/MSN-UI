@@ -34,8 +34,8 @@ export class AccountEffects {
               this.setCurrentUser(user);
             }
           }),
-            map((loginUser: ApplicationUser) =>
-              AccountActions.loginAccountSuccess({ loginUser })
+            map((loggedUser: ApplicationUser) =>
+              AccountActions.loginAccountSuccess({ loggedUser })
             ),
             catchError((error) =>
               of(AccountActions.loginAccountFailure({ error }))
@@ -51,8 +51,8 @@ export class AccountEffects {
       ofType(AccountActions.registerAccount),
       switchMap((action) =>
         this.backend.register(action.registerUser).pipe(
-          map((registerUser: ApplicationUser) =>
-            AccountActions.registerAccountSuccess({ registerUser })
+          map((registeredUser: ApplicationUser) =>
+            AccountActions.registerAccountSuccess({ registeredUser })
           ),
           catchError((error) =>
             of(AccountActions.registerAccountFailure({ error }))
@@ -73,6 +73,57 @@ export class AccountEffects {
           ),
           catchError((error) =>
             of(AccountActions.confirmAccountFailure({ error }))
+          )
+
+        )
+      )
+    )
+  );
+
+  allUsers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.allUsers),
+      switchMap((action) =>
+        this.backend.getAllUsers().pipe(
+          map((users:ApplicationUser[] ) =>
+            AccountActions.allUsersSuccess({ users })
+          ),
+          catchError((error) =>
+            of(AccountActions.allUsersFailure({ error }))
+          )
+
+        )
+      )
+    )
+  );
+
+  connectedUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.connectedUser),
+      switchMap((action) =>
+        this.backend.connectedUser().pipe(
+          map((user:ApplicationUser) =>
+            AccountActions.confirmAccountSuccess({ user })
+          ),
+          catchError((error) =>
+            of(AccountActions.connectedUserFailure({ error }))
+          )
+
+        )
+      )
+    )
+  );
+
+  getUserByUsername$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.getUserByUsername),
+      switchMap((action) =>
+        this.backend.getUserByUsername(action.userName).pipe(
+          map((byUsernameUser:ApplicationUser) =>
+            AccountActions.getUserByUsernameSuccess({ byUsernameUser })
+          ),
+          catchError((error) =>
+            of(AccountActions.getUserByUsernameFailure({ error }))
           )
 
         )
