@@ -92,7 +92,8 @@ export const allUsersFailure = createAction(
 );
 
 export const connectedUser = createAction(
-  AccountActionsTypes.GET_CONNECTED_USER
+  AccountActionsTypes.GET_CONNECTED_USER,
+  props<{ username: string }>()
 );
 
 export const connectedUserSuccess = createAction(

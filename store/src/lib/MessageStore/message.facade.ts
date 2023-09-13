@@ -9,7 +9,7 @@ import { MessageSent } from '../Entities/messageSent';
 import { MessageThread } from '../Entities/messageThread';
 
 @Injectable({ providedIn: 'root' })
-export class AccountFacade {
+export class MessageFacade {
 
 
   constructor(private store: Store<fromMessage.MessagePartialState>) { }

@@ -101,9 +101,9 @@ export class AccountEffects {
     this.actions$.pipe(
       ofType(AccountActions.connectedUser),
       switchMap((action) =>
-        this.backend.connectedUser().pipe(
-          map((user:ApplicationUser) =>
-            AccountActions.confirmAccountSuccess({ user })
+        this.backend.connectedUser(action.username).pipe(
+          map((connectedUser:ApplicationUser) =>
+            AccountActions.connectedUserSuccess({ connectedUser })
           ),
           catchError((error) =>
             of(AccountActions.connectedUserFailure({ error }))

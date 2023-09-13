@@ -1,7 +1,6 @@
-import { connectedUser } from './account.actions';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { ApplicationUser } from '../Entities/applicationUser';
 import { environment } from 'apps/msn-ui/src/environments/environment';
 import { LoginUser } from '../Entities/loginUser';
@@ -13,8 +12,7 @@ import { ConfirmationEmail } from '../Entities/emailConfirmation';
 export class AccountService {
 
   baseUrl = environment.API_URL;
-  private currentUserSource = new BehaviorSubject<ApplicationUser | null>(null);
-  currentUser$ = this.currentUserSource.asObservable();
+
 
   constructor(private http: HttpClient) { }
 
@@ -36,12 +34,13 @@ export class AccountService {
     return this.http.get<ApplicationUser[]>(this.baseUrl+"account/all-users");
   }
 
-  connectedUser(): Observable<ApplicationUser>{
-    return this.http.get<ApplicationUser>(this.baseUrl+"account/current-user");
+  connectedUser(username:string): Observable<ApplicationUser>{
+    return this.http.get<ApplicationUser>(this.baseUrl+"account/current-user/"+username);
   }
 
   getUserByUsername(userName:string): Observable<ApplicationUser>{
     return this.http.get<ApplicationUser>(this.baseUrl+"account/get-user-by-username/"+userName);
   }
+
 
 }

@@ -69,11 +69,11 @@ export class MessageService {
   }
 
   messageThread(messageThread : MessageThread): Observable<ChatMessage[]> {
-    return this.http.get<ChatMessage[]>(this.baseUrl + `chatMessages/thread/${messageThread.currentUsername}/${messageThread.otherUsername}`);
+    return this.http.get<ChatMessage[]>(this.baseUrl + `chatmessages/thread/${messageThread.currentUsername}/${messageThread.otherUsername}`);
   }
 
   unreadMessagesCount(): Observable<number> {
-    return this.http.get<number>(this.baseUrl + `unread-messages-count`);
+    return this.http.get<number>(this.baseUrl + `chatmessages/unread-messages-count`);
   }
 
 

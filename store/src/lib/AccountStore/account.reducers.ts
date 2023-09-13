@@ -32,7 +32,9 @@ export const accountAdapter: EntityAdapter<ApplicationUser> =
 export const initialState: State = accountAdapter.getInitialState({
   // set initial required properties
   loaded: false,
-  user:undefined
+  user:undefined,
+  connectedUser:undefined
+
 });
 
 

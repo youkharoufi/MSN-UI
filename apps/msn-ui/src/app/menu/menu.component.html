@@ -67,41 +67,47 @@
                                     </div>
                                 </div>
                                 <ul *ngFor="let user of allUsers$ | async" class="users">
-                                    <li *ngFor="let friend of user.friends; let i=index" class="person" data-chat="person1" (click)="displayOneChatAtATime(user.userName)">
+                                  <ng-container *ngIf="user.userName === userNameOuEmail">
+                                    <li *ngFor="let friend of user.friends; let i=index" class="person" data-chat="person1">
+                                      <div (click)="displayOneChatAtATime(friend.userName)">
                                         <div class="user">
-                                            <img [src]="friend.photoUrl" alt="Retail Admin">
-                                            <span class="status busy"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">{{friend.userName}}</span>
-                                            <span class="time">{{friend.email}}</span>
-                                        </p>
+                                          <img [src]="friend.photoUrl" alt="Retail Admin">
+                                          <span class="status busy"></span>
+                                      </div>
+                                      <p class="name-time">
+                                          <span class="name">{{friend.userName}}</span><br>
+                                          <span class="time">{{friend.email}}</span>
+                                      </p>
+                                      </div>
+
                                     </li>
+
+                                  </ng-container>
+
                                 </ul>
                             </div>
                         </div>
                         <div *ngIf="currentUserName.length > 0" style="display:inline-block; width:60%">
                             <div class="selected-user">
-                                <span>To: <span class="name">Emily Russell</span></span>
+                                <span>To: <span class="name">{{targetUser?.userName}}</span></span>
                             </div>
                             <div class="chat-container">
                                 <ul class="chat-box chatContainerScroll">
                                     <li class="chat-left">
                                         <div class="chat-avatar">
-                                            <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
-                                            <div class="chat-name">Russell</div>
+                                            <img [src]="targetUser?.photoUrl" alt="Retail Admin">
+                                            <div class="chat-name">{{targetUser?.email}}</div>
                                         </div>
-                                        <div class="chat-text">Hello, I'm Russell.
-                                            <br>How can I help you today?</div>
-                                        <div class="chat-hour">08:55 <span class="fa fa-check-circle"></span></div>
                                     </li>
-                                    <div *ngFor="let message of (messageService.messageThread$ | async)">
+
+                                    <div *ngFor="let message of allMessages">
+
                                       <li *ngIf="message.senderUsername === currentUser!.userName" class="chat-right">
                                         <div class="chat-hour">{{message.messageSent}}<span class="fa fa-check-circle"></span></div>
                                         <div class="chat-text">{{message.content}}</div>
                                         <div class="chat-avatar">
-                                            <img [src]="currentUser?.photoUrl" alt="Retail Admin">
-                                            <div class="chat-name">{{currentUser?.userName}}</div>
+                                            <img [src]="currentUser!.photoUrl" alt="Retail Admin">
+                                            <div class="chat-name">{{currentUser!.userName}}</div>
                                         </div>
                                     </li>
                                     <li *ngIf="message.senderUsername === targetUser!.userName" class="chat-left">
@@ -117,10 +123,10 @@
                                     </div>
                                 </ul>
                                 <div class="form-group mt-3 mb-0">
-                                    <textarea class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                                    <textarea class="form-control"[(ngModel)]="messageContent" rows="3" placeholder="Type your message here..."></textarea>
                                 </div>
                                 <div>
-                                  <p-button label="Send"></p-button>
+                                  <p-button label="Send" (click)="createMessage()"></p-button>
                                 </div>
                             </div>
                         </div>

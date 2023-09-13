@@ -35,8 +35,8 @@ export class AccountFacade {
     this.store.dispatch(allUsers());
   }
 
-  connectedUser(){
-    this.store.dispatch(connectedUser());
+  connectedUser(username:string){
+    this.store.dispatch(connectedUser({username}));
   }
 
   getUserByUserName(userName:string){

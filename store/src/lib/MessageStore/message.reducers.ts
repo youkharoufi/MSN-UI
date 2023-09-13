@@ -14,7 +14,7 @@ export interface State extends EntityState<ChatMessage> {
   error?: Error | null;
   messageSent?: MessageSent;
   messageThread?:MessageThread;
-  chatMessage?:ChatMessage
+  chatMessage?:ChatMessage;
 }
 
 export interface MessagePartialState {

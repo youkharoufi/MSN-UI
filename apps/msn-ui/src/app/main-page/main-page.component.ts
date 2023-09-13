@@ -1,7 +1,8 @@
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { ApplicationUser, LoginUser } from '@msn-ui/store';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Roling{
   name:string;
@@ -13,12 +14,14 @@ export interface Roling{
   styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent {
+
   loginUser: LoginUser = {
     UserNameOrEmail: '',
     Password: '',
   };
 
   registerUser: ApplicationUser = {
+    id:'',
     userName: '',
     email: '',
     password: '',
@@ -64,8 +67,10 @@ export class MainPageComponent {
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private accountFacade: AccountFacade
+    private accountFacade: AccountFacade,
+    private route: ActivatedRoute
   ) {}
+
 
   openLoginModal() {
     this.loginDialog = true;
