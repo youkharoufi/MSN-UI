@@ -13,45 +13,11 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 })
 export class MessageService {
 
-
-  private hubConnection?: HubConnection;
-  private messageThreadSource = new BehaviorSubject<ChatMessage[]>([]);
-  messageThread$ = this.messageThreadSource.asObservable();
-
   baseUrl = environment.API_URL;
-  hubUrl = environment.HUB_URL;
 
   constructor(private http: HttpClient) { }
 
-  createHubConnection(user: ApplicationUser | null, otherId: string) {
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl(this.hubUrl + 'message?user=' + otherId, {
-        accessTokenFactory: () => user!.token || ""
-      })
-      .withAutomaticReconnect()
-      .build();
 
-    this.hubConnection.start().catch(error => console.log(error));
-
-    this.hubConnection.on('ReceivedMessageThread', messages => {
-      this.messageThreadSource.next(messages);
-    })
-
-    this.hubConnection.on('NewMessage', message => {
-      this.messageThread$.pipe(take(1)).subscribe({
-        next: messages => {
-          this.messageThreadSource.next([...messages, message])
-        }
-      })
-    })
-  }
-
-  stopHubConnection() {
-    if (this.hubConnection) {
-      this.hubConnection.stop();
-
-    }
-  }
 
   createMessage(messageSent: MessageSent): Observable<ChatMessage> {
 

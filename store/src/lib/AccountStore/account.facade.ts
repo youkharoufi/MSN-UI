@@ -8,15 +8,17 @@ import * as fromAccount from './account.reducers';
 import * as AccountSelectors from './account.selectors';
 import { LoginUser } from '../Entities/loginUser';
 import { ConfirmationEmail } from '../Entities/emailConfirmation';
+import { tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AccountFacade {
 
   allUsers$ = this.store.pipe(select(AccountSelectors.getAllUsers));
-  oneUser$ = this.store.pipe(select(AccountSelectors.getUser));
   connectedUser$ = this.store.pipe(select(AccountSelectors.selectConnectedUser));
-  byUsernameUser$ = this.store.pipe(select(AccountSelectors.selectByUsername));
-
+  byUsernameUser$ = this.store.pipe(
+    select(AccountSelectors.selectByUsername),
+    tap(value => console.log(value))
+  );
   constructor(private store: Store<fromAccount.AccountPartialState>) { }
 
   login(loginUser: LoginUser) {

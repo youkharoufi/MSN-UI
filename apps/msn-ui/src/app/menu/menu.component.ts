@@ -8,6 +8,7 @@ import { ChatMessage } from 'store/src/lib/Entities/chatMessage';
 import { MessageSent } from 'store/src/lib/Entities/messageSent';
 import { MessageService } from 'store/src/lib/MessageStore/message.service';
 import { MessageThread } from 'store/src/lib/Entities/messageThread';
+import { filter, map, take } from 'rxjs';
 
 @Component({
   selector: 'msn-ui-menu',
@@ -22,7 +23,7 @@ export class MenuComponent implements OnInit{
 
   connectedUser$ = this.accountFacade.connectedUser$;
 
-  byUsernameUser$ = this.accountFacade.byUsernameUser$;
+  targetUser$ = this.accountFacade.byUsernameUser$;
 
   userNameOrEmail!: string;
 
@@ -32,78 +33,80 @@ export class MenuComponent implements OnInit{
 
   targetUser?: ApplicationUser;
 
-  currentUser?: ApplicationUser;
+  currentUser!: ApplicationUser
 
   messageContent = "";
 
   allMessages!: ChatMessage[];
 
-  constructor(private accountFacade : AccountFacade, private messageFacade: MessageFacade, public messageService: MessageService){}
+  constructor(private accountFacade : AccountFacade, public messageFacade: MessageFacade, public messageService: MessageService){}
 
   ngOnInit(): void{
     this.accountFacade.allUsers();
 
 
-    this.allUsers$.subscribe({
-      next:(users:ApplicationUser[])=>{
-        users.forEach((u)=>{
-          console.log(u.friends)
-        })
-      }
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('user')!);
 
-    this.connectedUser$.subscribe({
-      next:(user:ApplicationUser | undefined)=>{
 
-        this.currentUser = user;
 
-            }});
+    // this.connectedUser$.subscribe({
+    //   next:(user:ApplicationUser | undefined)=>{
 
-            const messageThread : MessageThread = {
-              currentUsername:this.userNameOuEmail,
-              otherUsername:this.targetUser?.userName
+    //     this.currentUser = user;
 
-            }
+    //         }});
+
+    //         const messageThread : MessageThread = {
+    //           currentUsername:this.userNameOuEmail,
+    //           otherUsername:this.targetUser?.userName
+
+    //         }
 
 
 
 
-    this.messageFacade.messageThread(messageThread);
-
-    this.messageService.messageThread(messageThread).subscribe({
-      next:(messages:any)=>{
-        this.allMessages = messages
-      }
-    })
+    // this.messageService.messageThread(messageThread).subscribe({
+    //   next:(messages:any)=>{
+    //     this.allMessages = messages
+    //   }
+    // })
 
   }
 
-  displayOneChatAtATime(userName:string){
-
+  displayOneChatAtATime(userName: string) {
     this.currentUserName = userName;
-    this.accountFacade.connectedUser(this.userNameOuEmail);
 
+    console.log(userName);
+
+    // Dispatch the action to fetch the user by username
     this.accountFacade.getUserByUserName(userName);
 
-    const messageThread : MessageThread = {
-      currentUsername:this.userNameOuEmail,
-      otherUsername:userName
 
-    }
+    // Subscribe to the observable and wait for a non-undefined value
+    this.accountFacade.byUsernameUser$.pipe(
+      filter(byUsernameUser => !!byUsernameUser), // Wait for a non-undefined value
+      take(1) // Take only one value and then complete
+    ).subscribe(byUsernameUser => {
+      // Now, the user data is available in byUsernameUser
 
-    this.messageService.messageThread(messageThread).subscribe({
-      next:(messages:any)=>{
-        this.allMessages = messages
+      this.targetUser$.subscribe({
+        next:(user:ApplicationUser | undefined)=>{
+          this.targetUser = user;
+        }
+      });
+
+      const messageThread: MessageThread = {
+        currentUsername: this.currentUser.userName,
+        otherUsername: userName
       }
-    })
 
-    this.byUsernameUser$.subscribe({
-      next:(user?:ApplicationUser)=>{
-        this.targetUser = user;
-      }
-    })
+      this.messageFacade.createHubConnection(this.currentUser, this.targetUser!.userName);
 
+      this.messageFacade.messageThread(messageThread);
+    });
   }
+
+
 
   addFriend(userName:string){
     console.log("Add friends store");
@@ -111,11 +114,7 @@ export class MenuComponent implements OnInit{
 
   createMessage(){
 
-    this.connectedUser$.subscribe({
-      next:(user:ApplicationUser | undefined)=>{
 
-        console.log(user)
-        this.currentUser= user!;
 
 
         const messageSent: MessageSent = {
@@ -127,25 +126,10 @@ export class MenuComponent implements OnInit{
 
         this.messageFacade.createMessage(messageSent);
 
-
-                const messageThread : MessageThread = {
-                  currentUsername:this.userNameOuEmail,
-                  otherUsername:this.targetUser?.userName
-
-                }
-
-        this.messageFacade.messageThread(messageThread);
-
-        this.messageService.messageThread(messageThread).subscribe({
-          next:(messages:any)=>{
-            console.log(messages);
-          }
-        })
       }
-    })
 
 
-    }
+
 
 
 
