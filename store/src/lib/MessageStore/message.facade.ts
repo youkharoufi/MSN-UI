@@ -55,7 +55,9 @@ export class MessageFacade {
   }
 
   createMessage(messageSent: MessageSent) {
-    this.store.dispatch(createMessage({messageSent}));
+    return this.hubConnection?.invoke('SendMessage', { senderUsername: messageSent.senderUsername, targetId: messageSent.targetId, content: messageSent.content, messageSent:messageSent.messageSent})
+    .catch(error => console.log(error));
+    //this.store.dispatch(createMessage({messageSent}));
   }
 
   inbox() {

@@ -1,7 +1,13 @@
-.scroll-container {
-  height:500px;
-  overflow-y: auto;
+::ng-deep .p-scrollpanel .p-scrollpanel-bar {
+  background: rgb(79, 79, 175) !important;
+  border: 0 none;
 }
+
+.scroll-container {
+  height: 500px; /* or whatever height you want */
+  overflow-y: scroll;
+}
+
 
 
 .p-inputtext {

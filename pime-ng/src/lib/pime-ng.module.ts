@@ -13,6 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
 import { CardModule } from 'primeng/card';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { CardModule } from 'primeng/card';
     DropdownModule,
     FileUploadModule,
     TabViewModule,
-    CardModule
+    CardModule,
+    ScrollPanelModule
   ],
   exports: [
     ToolbarModule,
@@ -44,7 +46,8 @@ import { CardModule } from 'primeng/card';
     DropdownModule,
     FileUploadModule,
     TabViewModule,
-    CardModule
+    CardModule,
+    ScrollPanelModule
   ],
 })
 export class PimeNgModule {}
