@@ -1,6 +1,6 @@
 import { MessageFacade } from './../../../../../store/src/lib/MessageStore/message.facade';
 import { connectedUser } from './../../../../../store/src/lib/AccountStore/account.actions';
-import { AfterContentChecked, AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ApplicationUser } from '@msn-ui/store';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { AccountService } from 'store/src/lib/AccountStore/account.service';
@@ -16,7 +16,7 @@ import { ScrollPanel } from 'primeng/scrollpanel';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit, AfterContentInit {
+export class MenuComponent implements OnInit {
 
   @ViewChild('scrollMe') scrollMe!: ElementRef;
 
@@ -63,7 +63,8 @@ export class MenuComponent implements OnInit, AfterContentInit {
   constructor(
     private accountFacade: AccountFacade,
     public messageFacade: MessageFacade,
-    public messageService: MessageService
+    public messageService: MessageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -95,24 +96,14 @@ export class MenuComponent implements OnInit, AfterContentInit {
 
 
 
-    this.allMessages$.subscribe({
-      next:(messages:ChatMessage[])=>{
-        this.allMessages = messages
-      }
-    })
+
   }
 
-  ngAfterContentInit(): void {
-      this.scrollToBottom()
-  }
 
   private scrollToBottom(): void {
     try {
-      if(this.scrollMe !== undefined){
         this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
-      }else{
-        console.error('scrollbar is undefined');
-      }
+
     } catch(err) {
       console.error('Could not scroll to bottom:', err);
     }
@@ -123,7 +114,10 @@ export class MenuComponent implements OnInit, AfterContentInit {
   }
 
   displayChat(user:ApplicationUser){
+
+
     this.targetUser = user;
+
 
     const messageThread: MessageThread = {
       currentUsername: this.currentUser.userName,
@@ -136,6 +130,14 @@ export class MenuComponent implements OnInit, AfterContentInit {
     );
 
     this.messageFacade.messageThread(messageThread);
+
+    this.allMessages$.subscribe({
+      next:(messages:ChatMessage[])=>{
+        this.allMessages = messages;
+        setTimeout(()=>{this.scrollToBottom()});
+      }
+    })
+
 
   }
 

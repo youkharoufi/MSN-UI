@@ -74,7 +74,7 @@
         </header>
 
 
-          <ul id="chat">
+          <ul id="chat" #scrollMe [scrollTop]="scrollMe.scrollHeight">
             <div *ngFor="let message of allMessages">
             <div *ngIf="message.senderUsername === targetUser!.userName">
 
@@ -111,10 +111,10 @@
 
 
         <footer>
-          <textarea placeholder="Type your message"></textarea>
+          <textarea [(ngModel)]="messageContent" placeholder="Type your message"></textarea>
           <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png" alt="">
           <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png" alt="">
-          <a href="#">Send</a>
+          <button (click)="createMessage()">Send</button>
         </footer>
       </main>
     </div>
