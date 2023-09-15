@@ -1,0 +1,90 @@
+<div>
+  <div class="selected-user">
+    <span
+      >To:
+      <span class="name">{{ targetUser?.userName }}</span></span
+    >
+  </div>
+  <div class="chat-container">
+    <ul class="chat-box chatContainerScroll">
+      <li class="chat-left">
+        <div class="chat-avatar">
+          <img
+            [src]="targetUser?.photoUrl"
+            alt="Retail Admin"
+          />
+          <div class="chat-name">{{ targetUser?.email }}</div>
+        </div>
+      </li>
+
+      <msn-ui-message-flow></msn-ui-message-flow>
+
+
+  <div class="scroll-container" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <div
+    *ngFor="let message of allMessages">
+    <li
+      *ngIf="
+        message.senderUsername === currentUser!.userName
+      "
+      class="chat-right"
+    >
+      <div class="chat-hour">
+        {{ message.messageSent | date: 'medium'
+        }}<span class="fa fa-check-circle"></span>
+      </div>
+      <div class="chat-text">{{ message.content }}</div>
+      <div class="chat-avatar">
+        <img
+          [src]="currentUser!.photoUrl"
+          alt="Retail Admin"
+        />
+        <div class="chat-name">
+          {{ currentUser!.userName }}
+        </div>
+      </div>
+    </li>
+    <li
+      *ngIf="
+        message.senderUsername === targetUser?.userName
+      "
+      class="chat-left"
+    >
+      <div class="chat-avatar">
+        <img
+          [src]="targetUser?.photoUrl"
+          alt="Retail Admin"
+        />
+        <div class="chat-name">
+          {{ targetUser?.userName }}
+        </div>
+      </div>
+      <div class="chat-text">{{ message.content }}</div>
+      <div class="chat-hour">
+        {{ message.messageSent | date: 'medium'
+        }}<span class="fa fa-check-circle"></span>
+      </div>
+    </li>
+  </div>
+
+
+  </div>
+
+  </ul>
+  <div class="form-group mt-3 mb-0">
+  <textarea
+  class="form-control"
+  [(ngModel)]="messageContent"
+  rows="3"
+  placeholder="Type your message here..."
+  ></textarea>
+  </div>
+  <div>
+  <p-button
+  label="Send"
+  (click)="createMessage()"
+  ></p-button>
+  </div>
+
+
+</div>

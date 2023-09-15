@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 import { MenuComponent } from './menu/menu.component';
+import { MessageFlowComponent } from './message-flow/message-flow.component';
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
     MainPageComponent,
     EmailConfirmationComponent,
     MenuComponent,
+    MessageFlowComponent,
   ],
   imports: [
     BrowserModule,

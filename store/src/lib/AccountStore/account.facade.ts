@@ -17,7 +17,9 @@ export class AccountFacade {
   connectedUser$ = this.store.pipe(select(AccountSelectors.selectConnectedUser));
   byUsernameUser$ = this.store.pipe(
     select(AccountSelectors.selectByUsername),
-    tap(value => console.log(value))
+    tap(value => {
+      console.log(value)
+    })
   );
   constructor(private store: Store<fromAccount.AccountPartialState>) { }
 

@@ -8,7 +8,7 @@ import { ChatMessage } from 'store/src/lib/Entities/chatMessage';
 import { MessageSent } from 'store/src/lib/Entities/messageSent';
 import { MessageService } from 'store/src/lib/MessageStore/message.service';
 import { MessageThread } from 'store/src/lib/Entities/messageThread';
-import { filter, map, take } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs';
 import { ScrollPanel } from 'primeng/scrollpanel';
 
 @Component({
@@ -16,7 +16,7 @@ import { ScrollPanel } from 'primeng/scrollpanel';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, AfterContentInit {
 
   @ViewChild('scrollMe') scrollMe!: ElementRef;
 
@@ -27,7 +27,7 @@ export class MenuComponent implements OnInit {
 
   connectedUser$ = this.accountFacade.connectedUser$;
 
-  targetUser$ = this.accountFacade.byUsernameUser$;
+  currentUser$ = this.accountFacade.byUsernameUser$;
 
   allMessages$ = this.messageFacade.messageThread$;
 
@@ -37,13 +37,28 @@ export class MenuComponent implements OnInit {
 
   currentUserName = '';
 
-  targetUser?: ApplicationUser;
+  targetUser: ApplicationUser = {
+    id:'',
+  userName:'',
+  email:'',
+  password:'',
+  link:'',
+
+  role:'',
+  friends:[]
+  };
 
   currentUser!: ApplicationUser;
+
+  currentUserWithFriends?: ApplicationUser;
 
   messageContent = '';
 
   allMessages!: ChatMessage[];
+
+  scrollbar!:ElementRef;
+
+  showChatFlow = false;
 
   constructor(
     private accountFacade: AccountFacade,
@@ -52,93 +67,76 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.accountFacade.allUsers();
 
     this.currentUser = JSON.parse(localStorage.getItem('user')!);
+
+    this.accountFacade.getUserByUserName(this.currentUser.userName);
+
+    // this.currentUser$.subscribe({
+    //   next:(user:ApplicationUser | undefined)=>{
+    //     this.currentUserWithFriends = user;
+    //     console.log(this.currentUserWithFriends);
+    //   }
+    // })
+
+    this.accountFacade.byUsernameUser$
+  .pipe(
+    filter((byUsernameUser) => !!byUsernameUser),
+    switchMap(byUsernameUser => this.currentUser$),
+    take(1)
+  )
+  .subscribe((currentUserWithFriends) => {
+    this.currentUserWithFriends = currentUserWithFriends;
+    console.log(this.currentUserWithFriends);
+  });
+
+
+
 
     this.allMessages$.subscribe({
       next:(messages:ChatMessage[])=>{
         this.allMessages = messages
       }
     })
+  }
 
-    // this.connectedUser$.subscribe({
-    //   next:(user:ApplicationUser | undefined)=>{
-
-    //     this.currentUser = user;
-
-    //         }});
-
-    //         const messageThread : MessageThread = {
-    //           currentUsername:this.userNameOuEmail,
-    //           otherUsername:this.targetUser?.userName
-
-    //         }
-
-    // this.messageService.messageThread(messageThread).subscribe({
-    //   next:(messages:any)=>{
-    //     this.allMessages = messages
-    //   }
-    // })
+  ngAfterContentInit(): void {
+      this.scrollToBottom()
   }
 
   private scrollToBottom(): void {
     try {
-      const scrollbar = this.scrollMe?.nativeElement;
-      if(scrollbar !== undefined){
-        scrollbar.scrollTop = scrollbar.scrollHeight;
+      if(this.scrollMe !== undefined){
+        this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
       }else{
-        console.error('scrollbar is null');
+        console.error('scrollbar is undefined');
       }
     } catch(err) {
       console.error('Could not scroll to bottom:', err);
     }
   }
 
-
-  displayOneChatAtATime(userName: string) {
-    this.currentUserName = userName;
-
-    // Dispatch the action to fetch the user by username
-    this.accountFacade.getUserByUserName(userName);
-
-    // Subscribe to the observable and wait for a non-undefined value
-    this.accountFacade.byUsernameUser$
-      .pipe(
-        filter((byUsernameUser) => !!byUsernameUser), // Wait for a non-undefined value
-        take(1) // Take only one value and then complete
-      )
-      .subscribe((byUsernameUser) => {
-        // Now, the user data is available in byUsernameUser
-
-        this.targetUser$.subscribe({
-          next: (user: ApplicationUser | undefined) => {
-            this.targetUser = user;
-            console.log(this.targetUser)
-            if(this.targetUser !== undefined)
-            this.scrollToBottom();
-          },
-        });
-
-        const messageThread: MessageThread = {
-          currentUsername: this.currentUser.userName,
-          otherUsername: userName,
-        };
-
-        this.messageFacade.createHubConnection(
-          this.currentUser,
-          this.targetUser!.userName
-        );
-
-        this.messageFacade.messageThread(messageThread);
-
-
-      });
-
-  }
-
   addFriend(userName: string) {
     console.log('Add friends store');
+  }
+
+  displayChat(user:ApplicationUser){
+    this.targetUser = user;
+
+    const messageThread: MessageThread = {
+      currentUsername: this.currentUser.userName,
+      otherUsername: this.targetUser.userName,
+    };
+
+    this.messageFacade.createHubConnection(
+      this.currentUser,
+      this.targetUser.userName
+    );
+
+    this.messageFacade.messageThread(messageThread);
+
   }
 
   createMessage() {
@@ -151,7 +149,10 @@ export class MenuComponent implements OnInit {
 
     this.messageFacade.createMessage(messageSent);
 
-    this.ngOnInit();
+
 
   }
+
+
+
 }

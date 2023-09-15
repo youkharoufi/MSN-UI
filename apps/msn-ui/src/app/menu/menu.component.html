@@ -36,179 +36,87 @@
       <span>Friends</span>
     </ng-template>
 
-    <link
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-    <div class="container">
-      <!-- Page header start -->
-      <div class="page-title">
-        <div class="row gutters">
-          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-            <h5 class="title">Chat App</h5>
-          </div>
-          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"></div>
-        </div>
-      </div>
-      <!-- Page header end -->
+    <div id="container">
+      <aside>
+        <header>
+          <input type="text" placeholder="search">
+        </header>
 
-      <!-- Content wrapper start -->
-      <div class="content-wrapper">
-        <!-- Row start -->
-        <div class="row gutters">
-          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="card m-0">
-              <!-- Row start -->
-              <div style="display: flex; flex-direction: row">
-                <div style="display: inline-block; width: 20%">
-                  <div class="users-container">
-                    <div class="chat-search-box">
-                      <div class="input-group">
-                        <span class="p-input-icon-left">
-                          <i class="pi pi-search"></i>
-                          <input
-                            type="text"
-                            pInputText
-                            [(ngModel)]="userNameOrEmail"
-                          />
-                        </span>
-                      </div>
-                    </div>
-                      <ul *ngFor="let user of allUsers$ | async" class="users">
-                        <ng-container *ngIf="user.userName === currentUser.userName">
-                          <p-scrollPanel [style]="{ width: '100%', height: '200px' }" styleClass="custombar1">
-                          <li
-                            *ngFor="let friend of user.friends; let i = index"
-                            class="person"
-                            data-chat="person1"
-                          >
-                            <div
-                              (click)="displayOneChatAtATime(friend.userName)"
-                            >
-                              <div class="user">
-                                <img
-                                  [src]="friend.photoUrl"
-                                  alt="Retail Admin"
-                                />
-                                <span class="status busy"></span>
-                              </div>
-                              <p class="name-time">
-                                <span class="name">{{ friend.userName }}</span
-                                ><br />
-                                <span class="time">{{ friend.email }}</span>
-                              </p>
-                            </div>
+        <ul>
+          <div *ngFor="let user of allUsers$ | async">
+            <div *ngIf="user.id === currentUserWithFriends?.id">
 
-                          </li>
-                        </p-scrollPanel>
-
-                        </ng-container>
-
-                      </ul>
-
-                  </div>
-                </div>
-                <div
-                  *ngIf="targetUser !== undefined"
-                  style="display: inline-block; width: 60%"
-                >
-                  <div class="selected-user">
-                    <span
-                      >To:
-                      <span class="name">{{ targetUser?.userName }}</span></span
-                    >
-                  </div>
-                  <div class="chat-container">
-                    <ul class="chat-box chatContainerScroll">
-                      <li class="chat-left">
-                        <div class="chat-avatar">
-                          <img
-                            [src]="targetUser?.photoUrl"
-                            alt="Retail Admin"
-                          />
-                          <div class="chat-name">{{ targetUser?.email }}</div>
-                        </div>
-                      </li>
-
-                      <div>
-
-
-                      </div>
-                        <div class="scroll-container" #scrollMe>
-                          <div
-                          *ngFor="let message of allMessages">
-                          <li
-                            *ngIf="
-                              message.senderUsername === currentUser!.userName
-                            "
-                            class="chat-right"
-                          >
-                            <div class="chat-hour">
-                              {{ message.messageSent | date: 'medium'
-                              }}<span class="fa fa-check-circle"></span>
-                            </div>
-                            <div class="chat-text">{{ message.content }}</div>
-                            <div class="chat-avatar">
-                              <img
-                                [src]="currentUser!.photoUrl"
-                                alt="Retail Admin"
-                              />
-                              <div class="chat-name">
-                                {{ currentUser!.userName }}
-                              </div>
-                            </div>
-                          </li>
-                          <li
-                            *ngIf="
-                              message.senderUsername === targetUser?.userName
-                            "
-                            class="chat-left"
-                          >
-                            <div class="chat-avatar">
-                              <img
-                                [src]="targetUser?.photoUrl"
-                                alt="Retail Admin"
-                              />
-                              <div class="chat-name">
-                                {{ targetUser?.userName }}
-                              </div>
-                            </div>
-                            <div class="chat-text">{{ message.content }}</div>
-                            <div class="chat-hour">
-                              {{ message.messageSent | date: 'medium'
-                              }}<span class="fa fa-check-circle"></span>
-                            </div>
-                          </li>
-                        </div>
-
-
-                      </div>
-
-                    </ul>
-                    <div class="form-group mt-3 mb-0">
-                      <textarea
-                        class="form-control"
-                        [(ngModel)]="messageContent"
-                        rows="3"
-                        placeholder="Type your message here..."
-                      ></textarea>
-                    </div>
-                    <div>
-                      <p-button
-                        label="Send"
-                        (click)="createMessage()"
-                      ></p-button>
-                    </div>
-                  </div>
-                </div>
+            <div *ngFor="let friend of currentUserWithFriends?.friends">
+            <li (click)="displayChat(friend)">
+              <img style="height:35px; width:35px;" [src]="friend.photoUrl" alt="">
+              <div>
+                <h2>{{friend.userName}} {{friend.email}}</h2>
+                <h3>
+                  <span class="status green"></span>
+                  online
+                </h3>
               </div>
-              <!-- Row end -->
+            </li>
             </div>
           </div>
         </div>
-        <!-- Row end -->
-      </div>
-      <!-- Content wrapper end -->
+          </ul>
+
+
+      </aside>
+      <main *ngIf="targetUser !== undefined">
+        <header>
+          <img style="height:35px; width:35px;" [src]="targetUser.photoUrl" alt="">
+          <div>
+            <h2>Chat with {{targetUser.userName}}</h2>
+          </div>
+          <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_star.png" alt="">
+        </header>
+
+
+          <ul id="chat">
+            <div *ngFor="let message of allMessages">
+            <div *ngIf="message.senderUsername === targetUser!.userName">
+
+              <li class="you">
+                <div class="entete">
+                  <span class="status green"></span>
+                  <h2>{{targetUser.userName}}</h2>
+                  <h3>{{message.messageSent | date: 'medium'}}</h3>
+                </div>
+                <div class="triangle"></div>
+                <div class="message">
+                  {{message.content}}
+                </div>
+              </li>
+
+            </div>
+
+            <div *ngIf="message.senderUsername === currentUser!.userName">
+              <li class="me">
+                <div class="entete">
+                  <span class="status green"></span>
+                  <h2>{{currentUser.userName}}</h2>
+                  <h3>{{message.messageSent | date: 'medium'}}</h3>
+                </div>
+                <div class="triangle"></div>
+                <div class="message">
+                  {{message.content}}
+                </div>
+              </li>
+
+            </div>
+          </div>
+          </ul>
+
+
+        <footer>
+          <textarea placeholder="Type your message"></textarea>
+          <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_picture.png" alt="">
+          <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_file.png" alt="">
+          <a href="#">Send</a>
+        </footer>
+      </main>
     </div>
   </p-tabPanel>
 </p-tabView>
