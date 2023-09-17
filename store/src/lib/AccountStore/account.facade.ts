@@ -2,6 +2,7 @@ import { ApplicationUser } from '@msn-ui/store';
 import { Injectable } from '@angular/core';
 import { Update } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
+import { MessageService } from 'primeng/api';
 
 import { allUsers, allUsersSuccess, confirmAccount, connectedUser, getUserByUsername, loginAccount, registerAccount } from './account.actions';
 import * as fromAccount from './account.reducers';
@@ -21,7 +22,7 @@ export class AccountFacade {
       console.log(value)
     })
   );
-  constructor(private store: Store<fromAccount.AccountPartialState>) { }
+  constructor(private store: Store<fromAccount.AccountPartialState>, private messageService : MessageService) { }
 
   login(loginUser: LoginUser) {
     this.store.dispatch(loginAccount({loginUser}));

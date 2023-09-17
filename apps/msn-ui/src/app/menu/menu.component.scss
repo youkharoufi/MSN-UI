@@ -8,11 +8,22 @@
   overflow: scroll;
 }
 
-
-
 .p-inputtext {
   width: 250px !important;
 }
+
+::ng-deep .card-btn .p-button {
+  margin:7px !important;
+}
+
+::ng-deep .card-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;  /* adjust for desired spacing between cards */
+}
+
+
+
 
 *{
 	box-sizing:border-box;

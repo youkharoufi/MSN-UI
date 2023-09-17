@@ -14,6 +14,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
 import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     FileUploadModule,
     TabViewModule,
     CardModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    PaginatorModule
   ],
   exports: [
     ToolbarModule,
@@ -47,7 +49,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     FileUploadModule,
     TabViewModule,
     CardModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    PaginatorModule
   ],
 })
 export class PimeNgModule {}

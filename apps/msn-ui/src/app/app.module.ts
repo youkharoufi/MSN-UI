@@ -41,7 +41,7 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, MenuComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

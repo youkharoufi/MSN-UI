@@ -5,29 +5,39 @@
       <span>All Users</span>
     </ng-template>
 
-    <div *ngFor="let user of allUsers$ | async">
-      <p-card
+    <div class="card-container" >
+        <p-card
+        *ngFor="let user of allUsers"
         [header]="user.userName"
         [subheader]="user.email"
-        [style]="{ width: '360px' }"
+        [style]="{ width: '300px' }"
       >
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+        quas!
+    </p>
         <ng-template pTemplate="header">
-          <img alt="Card" [src]="user.photoUrl" />
+          <img style="width:300px; height:300px" alt="Card" [src]="user.photoUrl" />
         </ng-template>
         <ng-template pTemplate="footer">
           <p-button
+            class="card-btn"
             (click)="addFriend(user.userName)"
             label="Add Friend"
-            icon="pi pi-check"
+            icon="pi pi-user"
           ></p-button>
           <p-button
+            class="card-btn"
             label="Send Message"
-            icon="pi pi-times"
+            icon="pi pi-id-card"
             styleClass="p-button-secondary"
-            [style]="{ 'margin-left': '.5em' }"
           ></p-button>
         </ng-template>
       </p-card>
+     </div>
+
+     <div class="card flex justify-content-center">
+      <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
     </div>
   </p-tabPanel>
   <p-tabPanel header="Header II">
@@ -66,9 +76,9 @@
       </aside>
       <main *ngIf="targetUser !== undefined">
         <header>
-          <img style="height:35px; width:35px;" [src]="targetUser.photoUrl" alt="">
+          <img *ngIf="targetUser.photoUrl" style="height:35px; width:35px;" [src]="targetUser.photoUrl" alt="">
           <div>
-            <h2>Chat with {{targetUser.userName}}</h2>
+            <h2>Chat with {{targetUser !== undefined ? targetUser.userName : ''}}</h2>
           </div>
           <img style="height:35px; width:35px;" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/ico_star.png" alt="">
         </header>

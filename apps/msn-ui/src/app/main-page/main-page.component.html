@@ -1,10 +1,20 @@
+<p-toast></p-toast>
+
 
 <p-toolbar>
   <div class="p-toolbar-group-start"></div>
   <div class="p-toolbar-group-end">
-    <p-toast></p-toast>
 
     <p-splitButton
+      *ngIf="currentUserConnected !== undefined"
+      label="Logout"
+      [model]="logoutDropdown"
+      icon="pi pi-prime"
+      styleClass="p-button-help"
+    ></p-splitButton>
+
+    <p-splitButton
+      *ngIf="currentUserConnected === undefined"
       label="User"
       [model]="userDropdown"
       icon="pi pi-prime"
@@ -13,8 +23,6 @@
 
   </div>
 </p-toolbar>
-
-    <p-toast></p-toast>
 
       <p-dialog [(visible)]="loginDialog">
 
@@ -81,7 +89,7 @@
           <div>
             <label style="display:block; align-items: flex-start;" htmlFor="password">Password</label>
               <p-password id="password" [(ngModel)]="registerUser.password" #password="ngModel" [toggleMask]="true" name="password" required autocomplete="off"></p-password>
-              <p style="color:red" *ngIf="password.errors?.['required'] && email.touched">Password is required</p>
+              <p style="color:red" *ngIf="password.errors?.['required'] && password.touched">Password is required</p>
           </div>
 
           <div>
@@ -121,4 +129,4 @@
     </p-dialog>
 
 
-    <msn-ui-menu [userNameOuEmail]="loginUser.UserNameOrEmail"></msn-ui-menu>
+    <msn-ui-menu #childReset></msn-ui-menu>

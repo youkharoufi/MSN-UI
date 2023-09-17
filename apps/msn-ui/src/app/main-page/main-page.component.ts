@@ -1,8 +1,9 @@
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { ApplicationUser, LoginUser } from '@msn-ui/store';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuComponent } from './../menu/menu.component';
 
 export interface Roling{
   name:string;
@@ -13,7 +14,9 @@ export interface Roling{
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent {
+export class MainPageComponent implements OnInit{
+
+  @ViewChild('childReset') childReset !: MenuComponent;
 
   loginUser: LoginUser = {
     UserNameOrEmail: '',
@@ -56,6 +59,16 @@ export class MainPageComponent {
     },
   ];
 
+  logoutDropdown: MenuItem[] = [
+    {
+      label: 'Logout',
+      icon: 'pi pi-user',
+      command: () => {
+        this.logoutUser();
+      },
+    }
+  ];
+
   loginDialog = false;
 
   registerDialog = false;
@@ -64,12 +77,28 @@ export class MainPageComponent {
 
   fileValidation = [''];
 
+  currentUserConnected?: ApplicationUser;
+
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private accountFacade: AccountFacade,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private menuComponent : MenuComponent,
+    private router : Router
   ) {}
+
+
+  ngOnInit(): void{
+    this.currentUserConnected = JSON.parse(localStorage.getItem('user')!);
+
+
+  }
+
+  logoutUser(){
+    localStorage.setItem('user', JSON.stringify(''));
+    this.currentUserConnected = undefined;
+  }
 
 
   openLoginModal() {
@@ -81,12 +110,22 @@ export class MainPageComponent {
   }
 
   login() {
+    this.messageService.clear()
+
     this.accountFacade.login(this.loginUser);
+
     this.messageService.add({
       severity: 'info',
       summary: 'Confirmed',
-      detail: 'You have been logged in successfully',
+      detail: 'You have been logged in successfully'
     });
+
+    const currentUrl = this.router.url;
+    console.log(currentUrl);
+    this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+
   }
 
   onFileSelect(event: any) {
@@ -124,11 +163,24 @@ export class MainPageComponent {
     console.log(this.registerUser);
 
     this.accountFacade.register(formData);
+
+    this.messageService.clear()
+
     this.messageService.add({
       severity: 'info',
       summary: 'Confirmed',
       detail:
         'A confirmation Email has been sent to you. Please consult your inbox',
     });
+
+    const currentUrl = this.router.url;
+    console.log(currentUrl);
+    this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+  }
+
+  reinitializeChild() {
+    this.childReset.reinitialize();
   }
 }
