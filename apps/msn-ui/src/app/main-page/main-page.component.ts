@@ -4,7 +4,7 @@ import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { ApplicationUser, LoginUser } from '@msn-ui/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuComponent } from './../menu/menu.component';
-import { of } from 'rxjs';
+import { filter, of, take } from 'rxjs';
 
 export interface Roling{
   name:string;
@@ -78,7 +78,9 @@ export class MainPageComponent{
 
   fileValidation = [''];
 
-  currentUserWithFriends = this.accountFacade.byUsernameUser$;
+  currentUserWithFriends$ = this.accountFacade.byUsernameUser$;
+
+  currentUserWithFriends: ApplicationUser | undefined;
 
 
   constructor(
@@ -92,10 +94,6 @@ export class MainPageComponent{
   ) {}
 
 
-  ngOnInit(): void{
-    if(localStorage.getItem('user') === null) this.currentUserWithFriends = of(undefined);
-  }
-
 
   getLoggedStatus(){
     if(localStorage.getItem('user') !== null) return true;
@@ -105,7 +103,6 @@ export class MainPageComponent{
   logoutUser(){
     localStorage.removeItem('user');
 
-    this.currentUserWithFriends = of(undefined);
     this.crd.detectChanges();
 
     this.messageService.add({
@@ -137,16 +134,10 @@ export class MainPageComponent{
 
   login() {
 
-        this.currentUserWithFriends = of(undefined);
-
 
     this.messageService.clear();
 
     this.accountFacade.login(this.loginUser);
-
-    this.accountFacade.getUserByUserName(this.loginUser.UserNameOrEmail);
-
-    console.log(this.currentUserWithFriends);
 
 
       this.messageService.add({

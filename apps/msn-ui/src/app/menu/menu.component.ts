@@ -61,7 +61,7 @@ export class MenuComponent implements OnInit{
     friends: [],
   };
 
-  @Input() currentUserWithFriends : ApplicationUser | null | undefined;
+  currentUserWithFriends : ApplicationUser | undefined;
 
   messageContent = '';
 
@@ -96,8 +96,10 @@ export class MenuComponent implements OnInit{
     this.accountFacade.allUsers();
 
 
+    this.currentUserWithFriends = JSON.parse(localStorage.getItem('user')!);
 
 
+    console.log(this.currentUserWithFriends?.friends);
 
       this.allUsers$.subscribe({
         next: (users: ApplicationUser[]) => {
@@ -132,7 +134,7 @@ export class MenuComponent implements OnInit{
     this.targetUser = user;
 
     const messageThread: MessageThread = {
-      currentUsername: this.currentUserWithFriends!.userName,
+      currentUsername: this.currentUserWithFriends?.userName,
       otherUsername: this.targetUser.userName,
     };
 

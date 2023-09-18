@@ -27,7 +27,7 @@ export class MessageFacade {
   createHubConnection(user: ApplicationUser | null, otherId: string) {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.hubUrl + 'message?user=' + otherId, {
-        accessTokenFactory: () => user!.token || ""
+        accessTokenFactory: () => user?.token || ""
       })
       .withAutomaticReconnect()
       .build();

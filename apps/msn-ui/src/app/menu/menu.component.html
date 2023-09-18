@@ -56,12 +56,13 @@
 
         <ul>
 
-          <div *ngIf="currentUserWithFriends !== undefined">
             <div *ngFor="let user of allUsers$ | async">
+
 
               <div *ngIf="user.id === currentUserWithFriends?.id">
 
               <div *ngFor="let friend of currentUserWithFriends?.friends">
+                {{friend.userName}}
               <li (click)="displayChat(friend)">
                 <img style="height:35px; width:35px;" [src]="friend.photoUrl" alt="">
                 <div>
@@ -75,8 +76,6 @@
               </div>
             </div>
           </div>
-          </div>
-
           </ul>
 
 
