@@ -140,12 +140,12 @@ export class MainPageComponent{
     this.accountFacade.login(this.loginUser);
 
 
-      this.messageService.add({
-      key: 'login',
-      severity: 'info',
-      summary: 'Confirmed',
-      detail: 'You have been logged in successfully'
-    });
+    //   this.messageService.add({
+    //   key: 'login',
+    //   severity: 'info',
+    //   summary: 'Confirmed',
+    //   detail: 'You have been logged in successfully'
+    // });
 
     setTimeout(()=>{
       const currentUrl = this.router.url;

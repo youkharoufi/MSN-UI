@@ -9,6 +9,8 @@ import { AccountService } from './account.service';
 import { ApplicationUser } from '../Entities/applicationUser';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
+import { MessageService } from 'primeng/api';
+
 
 @Injectable()
 export class AccountEffects {
@@ -28,8 +30,7 @@ export class AccountEffects {
       switchMap((action) =>
         this.backend.login(action.loginUser).pipe(
           tap((user:ApplicationUser) => {
-            console.log(user.token);
-            if (user) {
+            if (user!==null) {
               console.log(user);
               this.setCurrentUser(user);
             }
@@ -45,6 +46,17 @@ export class AccountEffects {
       )
       )
   );
+
+  showLoginError$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AccountActions.loginAccountFailure),
+    tap(() => {
+      console.log("mermelak");
+      this.messageService.add({key:"loginError", severity:'error', summary: 'Error', detail: 'Login Failed! Invalid credentials'});
+    })
+  ), { dispatch: false }
+);
+
 
   register$ = createEffect(() =>
     this.actions$.pipe(
@@ -62,6 +74,16 @@ export class AccountEffects {
       )
     )
   );
+
+  showRegisterError$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AccountActions.registerAccountFailure),
+    tap(() => {
+      console.log("mermelak");
+      this.messageService.add({key:"registerError", severity:'error', summary: 'Error', detail: 'Registration Failed, please try again later'});
+    })
+  ), { dispatch: false }
+);
 
   confirm$ = createEffect(() =>
     this.actions$.pipe(
@@ -131,6 +153,6 @@ export class AccountEffects {
     )
   );
 
-  constructor(private actions$: Actions, private backend: AccountService) { }
+  constructor(private actions$: Actions, private backend: AccountService, private messageService : MessageService) { }
 
         }

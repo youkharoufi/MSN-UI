@@ -11,12 +11,14 @@ import { ACCOUNT_API_ENDPOINT } from './AccountStore/account.token';
 import * as fromMessages from './MessageStore/message.reducers';
 import { MessageEffects } from './MessageStore/message.effects';
 import { MESSAGE_API_ENDPOINT } from './MessageStore/message.token';
+import { PimeNgModule } from '@msn-ui/pime-ng';
 
 
 
 @NgModule({
   imports: [
     CommonModule,
+    PimeNgModule,
 
     StoreModule.forFeature(
       fromAccounts.ACCOUNT_FEATURE_KEY,
