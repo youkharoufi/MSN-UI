@@ -1,4 +1,5 @@
-<p-toast></p-toast>
+<p-toast key="login" [life]="5000"></p-toast>
+<p-toast key="register" [life]="5000"></p-toast>
 
 
 <p-toolbar>
@@ -6,7 +7,7 @@
   <div class="p-toolbar-group-end">
 
     <p-splitButton
-      *ngIf="currentUserConnected !== undefined"
+      *ngIf="getLoggedStatus()"
       label="Logout"
       [model]="logoutDropdown"
       icon="pi pi-prime"
@@ -14,7 +15,7 @@
     ></p-splitButton>
 
     <p-splitButton
-      *ngIf="currentUserConnected === undefined"
+      *ngIf="!getLoggedStatus()"
       label="User"
       [model]="userDropdown"
       icon="pi pi-prime"
@@ -129,4 +130,4 @@
     </p-dialog>
 
 
-    <msn-ui-menu #childReset></msn-ui-menu>
+    <msn-ui-menu [currentUserWithFriends]="currentUserWithFriends | async"></msn-ui-menu>

@@ -1,5 +1,4 @@
 import { MessageFacade } from './../../../../../store/src/lib/MessageStore/message.facade';
-import { connectedUser } from './../../../../../store/src/lib/AccountStore/account.actions';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -8,7 +7,9 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -34,16 +35,12 @@ interface PageEvent {
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit{
   @ViewChild('scrollMe') scrollMe!: ElementRef;
 
   @Input() userNameOuEmail!: string;
 
   allUsers$ = this.accountFacade.allUsers$;
-
-  connectedUser$ = this.accountFacade.connectedUser$;
-
-  currentUser$ = this.accountFacade.byUsernameUser$;
 
   allMessages$ = this.messageFacade.messageThread$;
 
@@ -64,9 +61,7 @@ export class MenuComponent implements OnInit {
     friends: [],
   };
 
-  currentUser!: ApplicationUser;
-
-  currentUserWithFriends?: ApplicationUser;
+  @Input() currentUserWithFriends : ApplicationUser | null | undefined;
 
   messageContent = '';
 
@@ -78,9 +73,15 @@ export class MenuComponent implements OnInit {
 
   allUsers!: ApplicationUser[];
 
+  allOfTheUsers!: ApplicationUser[];
+
   totalRecords!: number;
   currentPage = 0;
   rowsPerPage = 4;
+
+  tabKey = 1;
+
+  noChatDisplay = false;
 
   constructor(
     private accountFacade: AccountFacade,
@@ -94,27 +95,8 @@ export class MenuComponent implements OnInit {
    ngOnInit(): void {
     this.accountFacade.allUsers();
 
-    this.currentUser = JSON.parse(localStorage.getItem('user')!);
 
-    this.accountFacade.getUserByUserName(this.currentUser.userName);
 
-    // this.currentUser$.subscribe({
-    //   next:(user:ApplicationUser | undefined)=>{
-    //     this.currentUserWithFriends = user;
-    //     console.log(this.currentUserWithFriends);
-    //   }
-    // })
-
-    this.accountFacade.byUsernameUser$
-      .pipe(
-        filter((byUsernameUser) => !!byUsernameUser),
-        switchMap((byUsernameUser) => this.currentUser$),
-        take(1)
-      )
-      .subscribe((currentUserWithFriends) => {
-        this.currentUserWithFriends = currentUserWithFriends;
-        console.log(this.currentUserWithFriends);
-      });
 
 
       this.allUsers$.subscribe({
@@ -127,7 +109,11 @@ export class MenuComponent implements OnInit {
 
 
 
+
   }
+
+
+
 
   private scrollToBottom(): void {
     try {
@@ -146,12 +132,12 @@ export class MenuComponent implements OnInit {
     this.targetUser = user;
 
     const messageThread: MessageThread = {
-      currentUsername: this.currentUser.userName,
+      currentUsername: this.currentUserWithFriends!.userName,
       otherUsername: this.targetUser.userName,
     };
 
     this.messageFacade.createHubConnection(
-      this.currentUser,
+      this.currentUserWithFriends!,
       this.targetUser.userName
     );
 
@@ -169,7 +155,7 @@ export class MenuComponent implements OnInit {
 
   createMessage() {
     const messageSent: MessageSent = {
-      senderUsername: this.currentUser.userName,
+      senderUsername: this.currentUserWithFriends!.userName,
       targetId: this.targetUser?.id,
       content: this.messageContent,
       messageSent: new Date(),
@@ -194,20 +180,5 @@ export class MenuComponent implements OnInit {
       this.updateDisplayedUsers();
     })
     this.cdr.detectChanges();
-  }
-
-  reinitialize(){
-    this.accountFacade.allUsers();
-  this.allUsers$.subscribe({
-    next: (users: ApplicationUser[]) => {
-      console.log(users);
-      this.allUsers = users;
-      this.totalRecords = this.allUsers.length;
-      this.cdr.markForCheck();
-      this.updateDisplayedUsers();
-
-    }
-  });
-
   }
 }

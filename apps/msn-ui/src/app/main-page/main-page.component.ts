@@ -1,9 +1,10 @@
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { ApplicationUser, LoginUser } from '@msn-ui/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuComponent } from './../menu/menu.component';
+import { of } from 'rxjs';
 
 export interface Roling{
   name:string;
@@ -14,7 +15,7 @@ export interface Roling{
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent implements OnInit{
+export class MainPageComponent{
 
   @ViewChild('childReset') childReset !: MenuComponent;
 
@@ -77,7 +78,8 @@ export class MainPageComponent implements OnInit{
 
   fileValidation = [''];
 
-  currentUserConnected?: ApplicationUser;
+  currentUserWithFriends = this.accountFacade.byUsernameUser$;
+
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -85,19 +87,43 @@ export class MainPageComponent implements OnInit{
     private accountFacade: AccountFacade,
     private route: ActivatedRoute,
     private menuComponent : MenuComponent,
-    private router : Router
+    private router : Router,
+    private crd : ChangeDetectorRef
   ) {}
 
 
   ngOnInit(): void{
-    this.currentUserConnected = JSON.parse(localStorage.getItem('user')!);
+    if(localStorage.getItem('user') === null) this.currentUserWithFriends = of(undefined);
+  }
 
 
+  getLoggedStatus(){
+    if(localStorage.getItem('user') !== null) return true;
+    else return false
   }
 
   logoutUser(){
-    localStorage.setItem('user', JSON.stringify(''));
-    this.currentUserConnected = undefined;
+    localStorage.removeItem('user');
+
+    this.currentUserWithFriends = of(undefined);
+    this.crd.detectChanges();
+
+    this.messageService.add({
+      key: 'logout',
+      severity: 'info',
+      summary: 'Confirmed',
+      detail: 'You have been logged out successfully'
+    });
+
+    setTimeout(()=>{
+      const currentUrl = this.router.url;
+      console.log(currentUrl);
+      this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+          this.router.navigate([currentUrl]);
+      });
+    },3000)
+
+
   }
 
 
@@ -110,21 +136,36 @@ export class MainPageComponent implements OnInit{
   }
 
   login() {
-    this.messageService.clear()
+
+        this.currentUserWithFriends = of(undefined);
+
+
+    this.messageService.clear();
 
     this.accountFacade.login(this.loginUser);
 
-    this.messageService.add({
+    this.accountFacade.getUserByUserName(this.loginUser.UserNameOrEmail);
+
+    console.log(this.currentUserWithFriends);
+
+
+      this.messageService.add({
+      key: 'login',
       severity: 'info',
       summary: 'Confirmed',
       detail: 'You have been logged in successfully'
     });
 
-    const currentUrl = this.router.url;
-    console.log(currentUrl);
-    this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
-    });
+    setTimeout(()=>{
+      const currentUrl = this.router.url;
+      console.log(currentUrl);
+      this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+          this.router.navigate([currentUrl]);
+      });
+    },3000)
+
+    this.loginDialog = false;
+
 
   }
 
@@ -146,10 +187,11 @@ export class MainPageComponent implements OnInit{
 
   register() {
 
+    this.messageService.clear();
+
     this.registerUser.role = this.role.name;
     this.registerUser.link = window.location.protocol + '//' + window.location.host + "/email-confirmation?email=" + this.registerUser.email + "&token="
 
-    console.log(this.registerUser.file);
     const formData = new FormData();
     formData.append('userName', this.registerUser.userName);
     formData.append('email', this.registerUser.email);
@@ -160,13 +202,12 @@ export class MainPageComponent implements OnInit{
 
 
 
-    console.log(this.registerUser);
-
     this.accountFacade.register(formData);
 
     this.messageService.clear()
 
     this.messageService.add({
+      key:'register',
       severity: 'info',
       summary: 'Confirmed',
       detail:
@@ -178,9 +219,8 @@ export class MainPageComponent implements OnInit{
     this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
     });
+
+    this.registerDialog = false;
   }
 
-  reinitializeChild() {
-    this.childReset.reinitialize();
-  }
 }
