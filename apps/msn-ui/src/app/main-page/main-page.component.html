@@ -37,8 +37,8 @@
           </div>
           <div>
             <span>
-              <label style="display:block; align-items: flex-start;" htmlFor="username">Username Or Email</label>
-              <input pInputText id="username" [(ngModel)]="loginUser.UserNameOrEmail" #userNameOrEmail="ngModel" name="usernameOrEmail" required autocomplete="off"/>
+              <label style="display:block; align-items: flex-start;" htmlFor="username">Username</label>
+              <input pInputText id="username" [(ngModel)]="loginUser.UserName" #userNameOrEmail="ngModel" name="usernameOrEmail" required autocomplete="off"/>
               <p style="color:red" *ngIf="userNameOrEmail.invalid && userNameOrEmail.touched">Username Or Email are required</p>
             </span>
 

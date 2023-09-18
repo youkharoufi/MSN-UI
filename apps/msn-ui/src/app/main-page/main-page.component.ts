@@ -20,7 +20,7 @@ export class MainPageComponent{
   @ViewChild('childReset') childReset !: MenuComponent;
 
   loginUser: LoginUser = {
-    UserNameOrEmail: '',
+    UserName: '',
     Password: '',
   };
 
