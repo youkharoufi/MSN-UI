@@ -1,3 +1,5 @@
+import { FriendRequest } from "./friendRequest";
+
 export interface ApplicationUser {
   id:string;
   userName:string;
@@ -9,4 +11,5 @@ export interface ApplicationUser {
   file?:File;
   role:string;
   friends?:ApplicationUser[];
+  friendRequests?:FriendRequest[];
 }

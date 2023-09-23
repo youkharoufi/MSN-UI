@@ -15,6 +15,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { PaginatorModule } from 'primeng/paginator';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { PaginatorModule } from 'primeng/paginator';
     TabViewModule,
     CardModule,
     ScrollPanelModule,
-    PaginatorModule
+    PaginatorModule,
+    BadgeModule
   ],
   exports: [
     ToolbarModule,
@@ -50,7 +52,8 @@ import { PaginatorModule } from 'primeng/paginator';
     TabViewModule,
     CardModule,
     ScrollPanelModule,
-    PaginatorModule
+    PaginatorModule,
+    BadgeModule
   ],
 })
 export class PimeNgModule {}

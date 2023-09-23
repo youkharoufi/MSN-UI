@@ -1,6 +1,5 @@
 import { FormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
-import { MsnDomainModule } from './../../../../store/src/lib/store.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,11 +13,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 import { MenuComponent } from './menu/menu.component';
-import { MessageFlowComponent } from './message-flow/message-flow.component';
+import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
+import { MsnDomainModule } from '@msn-ui/store';
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
   { path: 'email-confirmation', component: EmailConfirmationComponent },
+  { path: 'friend-requests', component: FriendRequestsComponent },
 ];
 
 @NgModule({
@@ -28,7 +29,7 @@ const routes: Routes = [
     MainPageComponent,
     EmailConfirmationComponent,
     MenuComponent,
-    MessageFlowComponent,
+    FriendRequestsComponent,
   ],
   imports: [
     BrowserModule,

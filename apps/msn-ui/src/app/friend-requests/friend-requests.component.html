@@ -1,0 +1,65 @@
+
+<h1>Here's a list of all your friend requests : </h1>
+
+<div class="card-container">
+
+  <p-card
+  *ngFor="let user of displayedUsers"
+  [header]="user?.userName"
+  [subheader]="user?.email"
+  [style]="{ width: '300px' }"
+>
+<p>
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+  quas!
+</p>
+  <ng-template pTemplate="header">
+    <img style="width:300px; height:300px" alt="Card" [src]="user?.photoUrl" />
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <p-button
+      class="card-btn p-button-success"
+      (click)="visibleA = !visibleA"
+      label="Accept Invitation ?"
+      icon="pi pi-thumbs-up-fill"
+    ></p-button>
+
+    <p-button
+      class="card-btn p-button-danger"
+      (click)="visibleB = !visibleB"
+      label="Deny Invitation ?"
+      icon="pi pi-thumbs-down-fill"
+    ></p-button>
+  </ng-template>
+
+
+
+  <p-dialog header="Header" [(visible)]="visibleA" [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Are you sure you want to <b>ACCEPT</b> {{user?.userName}}'s invitation ? </span>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="addFriend(user.userName)" label="Yes"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="Header" [(visible)]="visibleB" [style]="{ width: '50vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Are you sure you want to <b>DENY</b> {{user?.userName}}'s invitation ? </span>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="denyFriend(user.userName)" label="Yes"></p-button>
+    </ng-template>
+  </p-dialog>
+</p-card>
+
+
+
+</div>
+
+
+  <div class="card flex justify-content-center">
+    <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+  </div>
+
+

@@ -1,3 +1,4 @@
+import { FriendFacade } from './../../../../../store/src/lib/FriendStore/friend.facade';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
@@ -82,6 +83,8 @@ export class MainPageComponent{
 
   currentUserWithFriends: ApplicationUser | undefined;
 
+  friendRequestsCount$ = this.friendFacade.count$;
+
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -90,10 +93,24 @@ export class MainPageComponent{
     private route: ActivatedRoute,
     private menuComponent : MenuComponent,
     private router : Router,
-    private crd : ChangeDetectorRef
+    private crd : ChangeDetectorRef,
+    private friendFacade : FriendFacade
   ) {}
 
 
+  ngOnInit(): void{
+
+    if(localStorage.getItem('user')!== null){
+      const currentUser : ApplicationUser =JSON.parse(localStorage.getItem('user')!);
+
+      this.friendFacade.getFriendRequestsCount(currentUser.userName);
+
+    }else{
+      this.friendRequestsCount$ = of(0);
+      console.log("no connected User");
+    }
+
+  }
 
   getLoggedStatus(){
     if(localStorage.getItem('user') !== null) return true;
@@ -112,9 +129,9 @@ export class MainPageComponent{
       detail: 'You have been logged out successfully'
     });
 
+
     setTimeout(()=>{
       const currentUrl = this.router.url;
-      console.log(currentUrl);
       this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
           this.router.navigate([currentUrl]);
       });
@@ -149,7 +166,6 @@ export class MainPageComponent{
 
     setTimeout(()=>{
       const currentUrl = this.router.url;
-      console.log(currentUrl);
       this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
           this.router.navigate([currentUrl]);
       });
@@ -166,7 +182,6 @@ export class MainPageComponent{
 
     if (event && event.files && event.files.length > 0) {
       this.registerUser.file = event.files[0];
-      console.log(this.registerUser.file?.type)
     }else{
       this.fileValidation.push("The picture is required to register")
     }
@@ -206,12 +221,15 @@ export class MainPageComponent{
     });
 
     const currentUrl = this.router.url;
-    console.log(currentUrl);
     this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
     });
 
     this.registerDialog = false;
+  }
+
+  redirectToFriendRequests(){
+    this.router.navigateByUrl('/friend-requests');
   }
 
 }

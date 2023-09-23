@@ -1,4 +1,3 @@
-import { LoginUser } from './Entities/loginUser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
@@ -11,6 +10,11 @@ import { ACCOUNT_API_ENDPOINT } from './AccountStore/account.token';
 import * as fromMessages from './MessageStore/message.reducers';
 import { MessageEffects } from './MessageStore/message.effects';
 import { MESSAGE_API_ENDPOINT } from './MessageStore/message.token';
+
+import * as fromFriend from './FriendStore/friend.reducers';
+import { FriendEffects } from './FriendStore/friend.effects';
+import { FRIEND_API_ENDPOINT } from './FriendStore/friend.token';
+
 import { PimeNgModule } from '@msn-ui/pime-ng';
 
 
@@ -31,10 +35,17 @@ import { PimeNgModule } from '@msn-ui/pime-ng';
       fromMessages.reducer
     ),
     EffectsModule.forFeature([MessageEffects]),
+
+    StoreModule.forFeature(
+      fromFriend.FRIEND_FEATURE_KEY,
+      fromFriend.reducer
+    ),
+    EffectsModule.forFeature([FriendEffects]),
   ],
   providers: [
     { provide: ACCOUNT_API_ENDPOINT, useValue: '' },
     { provide: MESSAGE_API_ENDPOINT, useValue: '' },
+    { provide: FRIEND_API_ENDPOINT, useValue: '' },
   ],
 })
 export class MsnDomainModule {}

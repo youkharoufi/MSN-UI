@@ -1,3 +1,4 @@
+import { FriendFacade } from './../../../../../store/src/lib/FriendStore/friend.facade';
 import { MessageFacade } from './../../../../../store/src/lib/MessageStore/message.facade';
 import {
   AfterContentChecked,
@@ -83,11 +84,16 @@ export class MenuComponent implements OnInit{
 
   noChatDisplay = false;
 
+  visible = false;
+
+  targetU!: ApplicationUser;
+
   constructor(
     private accountFacade: AccountFacade,
     public messageFacade: MessageFacade,
     public messageService: MessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private friendFacade: FriendFacade
   ) {
 
   }
@@ -95,11 +101,8 @@ export class MenuComponent implements OnInit{
    ngOnInit(): void {
     this.accountFacade.allUsers();
 
-
     this.currentUserWithFriends = JSON.parse(localStorage.getItem('user')!);
 
-
-    console.log(this.currentUserWithFriends?.friends);
 
       this.allUsers$.subscribe({
         next: (users: ApplicationUser[]) => {
@@ -126,8 +129,12 @@ export class MenuComponent implements OnInit{
     }
   }
 
-  addFriend(userName: string) {
-    console.log('Add friends store');
+  sendFriendRequest(){
+
+
+    console.log(this.targetU.userName);
+    this.friendFacade.sendFriendRequest(this.currentUserWithFriends!.userName, this.targetU.userName);
+
   }
 
   displayChat(user: ApplicationUser) {
@@ -182,5 +189,11 @@ export class MenuComponent implements OnInit{
       this.updateDisplayedUsers();
     })
     this.cdr.detectChanges();
+  }
+
+
+  openModal(user:ApplicationUser){
+    this.targetU = user;
+    this.visible = true;
   }
 }

@@ -22,7 +22,7 @@ export class AccountFacade {
       console.log(value)
     })
   );
-  constructor(private store: Store<fromAccount.AccountPartialState>, private messageService : MessageService) { }
+  constructor(private store: Store<fromAccount.AccountPartialState>) { }
 
   login(loginUser: LoginUser) {
     this.store.dispatch(loginAccount({loginUser}));

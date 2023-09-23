@@ -2,11 +2,13 @@
 <p-toast key="register" [life]="5000"></p-toast>
 <p-toast key="loginError" [life]="5000"></p-toast>
 <p-toast key="registerError" [life]="5000"></p-toast>
+<p-toast key="FriendRequestError" [life]="5000"></p-toast>
 
 <p-toolbar>
-  <div class="p-toolbar-group-start"></div>
+  <div class="p-toolbar-group-start">
+    <p-button label="Friend Requests" (click)="redirectToFriendRequests()" icon="pi pi-users" styleClass="p-button-warning" [badge]="(friendRequestsCount$ | async)?.toString()" badgeClass="p-badge-danger"></p-button>
+    </div>
   <div class="p-toolbar-group-end">
-
     <p-splitButton
       *ngIf="getLoggedStatus()"
       label="Logout"
@@ -22,113 +24,259 @@
       icon="pi pi-prime"
       styleClass="p-button-help"
     ></p-splitButton>
-
   </div>
 </p-toolbar>
 
-      <p-dialog [(visible)]="loginDialog">
+<p-dialog [(visible)]="loginDialog">
+  <form #loginForm="ngForm" (submit)="login()" autocomplete="off">
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 5px;
+      "
+    >
+      <div>
+        <h3>Okay ! Let's get you signed in</h3>
+      </div>
+      <div>
+        <span>
+          <label
+            style="display: block; align-items: flex-start"
+            htmlFor="username"
+            >Username</label
+          >
+          <input
+            pInputText
+            id="username"
+            [(ngModel)]="loginUser.UserName"
+            #userNameOrEmail="ngModel"
+            name="usernameOrEmail"
+            required
+            autocomplete="off"
+          />
+          <p
+            style="color: red"
+            *ngIf="userNameOrEmail.invalid && userNameOrEmail.touched"
+          >
+            Username Or Email are required
+          </p>
+        </span>
+      </div>
 
-        <form #loginForm="ngForm" (submit)="login()" autocomplete="off">
+      <div>
+        <label
+          style="display: block; align-items: flex-start"
+          htmlFor="password"
+          >Password</label
+        >
+        <p-password
+          id="password"
+          [(ngModel)]="loginUser.Password"
+          #password="ngModel"
+          [toggleMask]="true"
+          name="password"
+          required
+          autocomplete="off"
+        ></p-password>
+        <p
+          style="color: red"
+          *ngIf="password.errors?.['required'] && password.touched"
+        >
+          Password is required
+        </p>
+      </div>
 
-        <div style="display:flex; flex-direction:column; align-items: flex-start; margin-left:5px;">
-          <div>
-            <h3>Okay ! Let's get you signed in </h3>
+      <div style="margin-left: 165px; margin-top: 20px">
+        <p-button
+          [disabled]="loginForm.invalid!"
+          label="Login"
+          (click)="login()"
+          class="p-button-success"
+        ></p-button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
 
-          </div>
-          <div>
-            <span>
-              <label style="display:block; align-items: flex-start;" htmlFor="username">Username</label>
-              <input pInputText id="username" [(ngModel)]="loginUser.UserName" #userNameOrEmail="ngModel" name="usernameOrEmail" required autocomplete="off"/>
-              <p style="color:red" *ngIf="userNameOrEmail.invalid && userNameOrEmail.touched">Username Or Email are required</p>
-            </span>
+<p-dialog [(visible)]="registerDialog">
+  <form #registerForm="ngForm" (submit)="register()" autocomplete="off">
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 5px;
+      "
+    >
+      <div>
+        <h3>Okay ! Let's get you registered</h3>
+      </div>
+      <div>
+        <span>
+          <label
+            style="display: block; align-items: flex-start"
+            htmlFor="username"
+            >Username</label
+          >
+          <input
+            pInputText
+            id="username"
+            [(ngModel)]="registerUser.userName"
+            #username="ngModel"
+            name="username"
+            required
+            autocomplete="off"
+          />
+          <p
+            style="color: red"
+            *ngIf="username.errors?.['required'] && username.touched"
+          >
+            Username is required
+          </p>
+        </span>
+      </div>
 
-          </div>
+      <div>
+        <span>
+          <label style="display: block; align-items: flex-start" htmlFor="email"
+            >Email</label
+          >
+          <input
+            pInputText
+            id="email"
+            [(ngModel)]="registerUser.email"
+            #email="ngModel"
+            name="email"
+            required
+            email
+            autocomplete="off"
+          />
+          <p
+            style="color: red"
+            *ngIf="email.errors?.['email'] && email.touched"
+          >
+            Please enter a valid email address
+          </p>
+          <p
+            style="color: red"
+            *ngIf="email.errors?.['required'] && email.touched"
+          >
+            Email is required
+          </p>
+        </span>
+      </div>
 
-          <div>
-            <label style="display:block; align-items: flex-start;" htmlFor="password">Password</label>
-              <p-password id="password" [(ngModel)]="loginUser.Password" #password="ngModel" [toggleMask]="true" name="password" required autocomplete="off"></p-password>
-              <p style="color:red" *ngIf="password.errors?.['required'] && password.touched">Password is required</p>
-          </div>
+      <div>
+        <label
+          style="display: block; align-items: flex-start"
+          htmlFor="password"
+          >Password</label
+        >
+        <p-password
+          id="password"
+          [(ngModel)]="registerUser.password"
+          #password="ngModel"
+          [toggleMask]="true"
+          name="password"
+          required
+          autocomplete="off"
+        ></p-password>
+        <p
+          style="color: red"
+          *ngIf="password.errors?.['required'] && password.touched"
+        >
+          Password is required
+        </p>
+      </div>
 
-          <div style="margin-left:165px; margin-top: 20px;">
-            <button [disabled]="loginForm.invalid" pButton pRipple label="Login" (click)="login()" class="p-button-success"></button>
-          </div>
+      <div>
+        <label
+          style="display: block; align-items: flex-start"
+          htmlFor="passwordConfirmation"
+          >Password Confirmation</label
+        >
+        <p-password
+          id="passwordConfirmation"
+          [(ngModel)]="passwordConfirmation"
+          #passwordConf="ngModel"
+          [toggleMask]="true"
+          name="passwordConf"
+          required
+          autocomplete="off"
+        ></p-password>
+        <p
+          style="color: red"
+          *ngIf="passwordConf.errors?.['required'] && passwordConf.touched"
+        >
+          Password confirmation is required
+        </p>
+        <p
+          style="color: red"
+          *ngIf="
+            registerUser.password !== passwordConfirmation &&
+            passwordConf.touched
+          "
+        >
+          Passwords do not match
+        </p>
+      </div>
+
+      <div>
+        <label style="display: block; align-items: flex-start" htmlFor="role"
+          >Role</label
+        >
+        <p-dropdown
+          id="role"
+          [options]="roles"
+          #roleValue="ngModel"
+          name="roleValue"
+          [(ngModel)]="role"
+          optionLabel="name"
+        ></p-dropdown>
+        <p
+          style="color: red"
+          *ngIf="roleValue.errors?.['required'] && roleValue.touched"
+        >
+          Password confirmation is required
+        </p>
+      </div>
+      <br />
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <label style="align-items: flex-start" htmlFor="fileSelector"
+          >Upload your profile picture here :&nbsp;&nbsp;&nbsp;</label
+        ><br />
+        <div>
+          <p-fileUpload
+            mode="basic"
+            chooseLabel="Choose"
+            name="demo[]"
+            url="https://www.primefaces.org/cdn/api/upload.php"
+            (onSelect)="onFileSelect($event)"
+          ></p-fileUpload>
         </div>
-
-      </form>
-
-      </p-dialog>
-
-
-
-    <p-dialog [(visible)]="registerDialog">
-
-      <form #registerForm="ngForm" (submit)="register()" autocomplete="off">
-        <div style="display:flex; flex-direction:column; align-items: flex-start; margin-left:5px;">
-          <div>
-            <h3>Okay ! Let's get you registered </h3>
-
-          </div>
-          <div>
-            <span>
-              <label style="display:block; align-items: flex-start;" htmlFor="username">Username</label>
-              <input pInputText id="username" [(ngModel)]="registerUser.userName" #username="ngModel" name="username" required autocomplete="off"/>
-              <p style="color:red" *ngIf="username.errors?.['required'] && username.touched">Username is required</p>
-            </span>
-
-          </div>
-
-          <div>
-            <span>
-              <label style="display:block; align-items: flex-start;" htmlFor="email">Email</label>
-              <input pInputText id="email" [(ngModel)]="registerUser.email" #email="ngModel" name="email" required email autocomplete="off"/>
-              <p style="color:red" *ngIf="email.errors?.['email'] && email.touched">Please enter a valid email address</p>
-              <p style="color:red" *ngIf="email.errors?.['required'] && email.touched">Email is required</p>
-            </span>
-
-          </div>
-
-          <div>
-            <label style="display:block; align-items: flex-start;" htmlFor="password">Password</label>
-              <p-password id="password" [(ngModel)]="registerUser.password" #password="ngModel" [toggleMask]="true" name="password" required autocomplete="off"></p-password>
-              <p style="color:red" *ngIf="password.errors?.['required'] && password.touched">Password is required</p>
-          </div>
-
-          <div>
-            <label style="display:block; align-items: flex-start;" htmlFor="passwordConfirmation">Password Confirmation</label>
-              <p-password id="passwordConfirmation" [(ngModel)]="passwordConfirmation" #passwordConf="ngModel" [toggleMask]="true" name="passwordConf" required autocomplete="off"></p-password>
-              <p style="color:red" *ngIf="passwordConf.errors?.['required'] && passwordConf.touched">Password confirmation is required</p>
-              <p style="color:red" *ngIf="registerUser.password !== passwordConfirmation && passwordConf.touched">Passwords do not match</p>
-          </div>
-
-          <div>
-            <label style="display:block; align-items: flex-start;" htmlFor="role">Role</label>
-            <p-dropdown id="role" [options]="roles" #roleValue="ngModel" name="roleValue" [(ngModel)]="role" optionLabel="name"></p-dropdown>
-            <p style="color:red" *ngIf="roleValue.errors?.['required'] && roleValue.touched">Password confirmation is required</p>
-          </div>
-          <br>
-          <div style="display:flex; flex-direction:row; justify-content: center; align-items: center;">
-            <label style="align-items: flex-start;" htmlFor="fileSelector">Upload your profile picture here :&nbsp;&nbsp;&nbsp;</label><br>
-            <div>
-              <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onSelect)="onFileSelect($event)"></p-fileUpload>
-            </div>
-            <div *ngFor="let fileV of fileValidation">
-              <p style="color:red">{{fileV}}</p>
-            </div>
-          </div>
+        <div *ngFor="let fileV of fileValidation">
+          <p style="color: red">{{ fileV }}</p>
         </div>
+      </div>
+    </div>
 
+    <div style="display: flex; justify-content: end; margin-top: 20px">
+      <p-button
+        label="Signup"
+        (click)="register()"
+        class="p-button-success"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>
 
-          <div style="display:flex; justify-content:end; margin-top: 20px;">
-            <button [disabled]="registerForm.invalid" pButton pRipple label="Signup" (click)="register()" class="p-button-success"></button>
-          </div>
-
-      </form>
-
-
-
-
-    </p-dialog>
-
-
-    <msn-ui-menu></msn-ui-menu>
+<msn-ui-menu></msn-ui-menu>

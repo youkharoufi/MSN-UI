@@ -22,17 +22,13 @@
         <ng-template pTemplate="footer">
           <p-button
             class="card-btn"
-            (click)="addFriend(user.userName)"
+            (click)="openModal(user)"
             label="Add Friend"
-            icon="pi pi-user"
-          ></p-button>
-          <p-button
-            class="card-btn"
-            label="Send Message"
-            icon="pi pi-id-card"
-            styleClass="p-button-secondary"
+            icon="pi pi-external-link"
           ></p-button>
         </ng-template>
+
+
       </p-card>
      </div>
 
@@ -136,3 +132,15 @@
     </div>
   </p-tabPanel>
 </p-tabView>
+
+<p-dialog header="Header" [(visible)]="visible" [style]="{ width: '500px' }">
+  <ng-template pTemplate="header">
+      <span class="text-xl font-bold">Friend Request !</span>
+  </ng-template>
+  <h1>Would you like to send a friend request to {{targetU?.userName}}</h1>
+  <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="sendFriendRequest()" label="Ok"></p-button>
+  </ng-template>
+</p-dialog>
+
+
