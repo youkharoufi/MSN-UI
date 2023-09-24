@@ -9,12 +9,13 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PimeNgModule } from '@msn-ui/pime-ng';
 import { StoreModule } from '@ngrx/store';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 import { MenuComponent } from './menu/menu.component';
 import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
 import { MsnDomainModule } from '@msn-ui/store';
+import { HttpLoadingInterceptor } from './Interceptors/http-loading.interceptor';
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -42,7 +43,8 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
   ],
-  providers: [ConfirmationService, MessageService, MenuComponent],
+  providers: [ConfirmationService, MessageService, MenuComponent, AppComponent,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true, deps: [AppComponent] }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

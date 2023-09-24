@@ -1,5 +1,13 @@
 
 <h1>Here's a list of all your friend requests : </h1>
+<div>
+  <p-button
+      class="card-btn p-button-success"
+      (click)="backToMain()"
+      label="Back To Main Page ?"
+      icon="pi pi-backward"
+    ></p-button>
+</div>
 
 <div class="card-container">
 
@@ -60,6 +68,13 @@
 
   <div class="card flex justify-content-center">
     <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+  </div>
+
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="card">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
   </div>
 
 

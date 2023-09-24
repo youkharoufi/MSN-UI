@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import * as fromFriend from './friend.reducers';
-import { confirmFriendRequest, deleteFriendRequest, getAllFriendRequests, getAllUsers, getFriendRequest, getFriendRequestCount, sendFriendRequest } from "./friend.actions";
+import { confirmFriendRequest, deleteFriendRequest, getAllFriendRequests, getAllFriends, getAllUsers, getFriendRequest, getFriendRequestCount, sendFriendRequest } from "./friend.actions";
 import * as friendSelectors from './friend.selectors';
 
 
@@ -12,6 +12,7 @@ export class FriendFacade {
   count$ = this.store.pipe(select(friendSelectors.getFriendCount));
   friendRequest$ = this.store.pipe(select(friendSelectors.getAllFriendRequests))
   allUser$ = this.store.pipe(select(friendSelectors.getAllUsersFR));
+  allFriend$ = this.store.pipe(select(friendSelectors.getAllFriends));
 
   constructor(private store: Store<fromFriend.FriendPartialState>) { }
 
@@ -42,6 +43,10 @@ export class FriendFacade {
 
   getAllUsers(currentUserName: string) {
     this.store.dispatch(getAllUsers({currentUserName}));
+  }
+
+  getAllFriends(currentUserName:string){
+    this.store.dispatch(getAllFriends({currentUserName}))
   }
 
 

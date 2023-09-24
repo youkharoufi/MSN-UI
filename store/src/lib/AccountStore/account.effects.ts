@@ -1,5 +1,4 @@
 import { ConfirmationEmail } from './../Entities/emailConfirmation';
-import { environment } from './../../../../apps/msn-ui/src/environments/environment';
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
@@ -106,7 +105,7 @@ export class AccountEffects {
     this.actions$.pipe(
       ofType(AccountActions.allUsers),
       switchMap((action) =>
-        this.backend.getAllUsers().pipe(
+        this.backend.getAllUsers(action.currentUsername).pipe(
           map((users:ApplicationUser[] ) =>
             AccountActions.allUsersSuccess({ users })
           ),

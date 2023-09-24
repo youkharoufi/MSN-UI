@@ -15,6 +15,11 @@ export const selectConnectedUser = createSelector(
   (state: State) => state.connectedUser
 );
 
+export const selectLoggedUser = createSelector(
+  getAccountState,
+  (state: State) => state.loggedUser
+);
+
 export const selectByUsername = createSelector(
   getAccountState,
   (state: State) => state.byUsernameUser

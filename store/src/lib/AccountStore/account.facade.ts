@@ -1,4 +1,3 @@
-import { ApplicationUser } from '@msn-ui/store';
 import { Injectable } from '@angular/core';
 import { Update } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
@@ -22,6 +21,9 @@ export class AccountFacade {
       console.log(value)
     })
   );
+  loggedUser$ = this.store.pipe(select(AccountSelectors.selectLoggedUser));
+
+
   constructor(private store: Store<fromAccount.AccountPartialState>) { }
 
   login(loginUser: LoginUser) {
@@ -36,8 +38,8 @@ export class AccountFacade {
     this.store.dispatch(confirmAccount({confEmail}))
   }
 
-  allUsers(){
-    this.store.dispatch(allUsers());
+  allUsers(currentUsername:string){
+    this.store.dispatch(allUsers({currentUsername}));
   }
 
   connectedUser(username:string){

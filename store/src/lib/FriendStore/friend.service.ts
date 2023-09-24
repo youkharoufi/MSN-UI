@@ -57,4 +57,10 @@ export class FriendService {
 
   }
 
+  getAllFriends(currentUserName: string): Observable<ApplicationUser[]> {
+
+    return this.http.get<ApplicationUser[]>(this.baseUrl + "friends/get-all-user-friends/"+currentUserName);
+
+  }
+
 }

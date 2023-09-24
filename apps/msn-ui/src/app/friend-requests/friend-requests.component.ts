@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApplicationUser } from '@msn-ui/store';
+import { ApplicationUser, LoginUser } from '@msn-ui/store';
 import { take } from 'rxjs';
 import { AccountFacade } from 'store/src/lib/AccountStore/account.facade';
 import { FriendRequest } from 'store/src/lib/Entities/friendRequest';
@@ -12,13 +12,12 @@ import { FriendFacade } from 'store/src/lib/FriendStore/friend.facade';
   styleUrls: ['./friend-requests.component.scss'],
 })
 export class FriendRequestsComponent implements OnInit {
-
   currentUser!: ApplicationUser;
-  allFriendRequest$= this.friendFacade.friendRequest$;
+  allFriendRequest$ = this.friendFacade.friendRequest$;
   requestingUsers: ApplicationUser[] = [];
   getUser$ = this.accountFacade.byUsernameUser$;
-  allUsersThatRequested : ApplicationUser[] = [];
-  displayedUsers : ApplicationUser[] = [];
+  allUsersThatRequested: ApplicationUser[] = [];
+  displayedUsers: ApplicationUser[] = [];
   allUser$ = this.friendFacade.allUser$;
 
   visibleA = false;
@@ -33,14 +32,20 @@ export class FriendRequestsComponent implements OnInit {
   friendRequest$ = this.friendFacade.friendRequest$;
   friendRequest!: FriendRequest;
 
+  allUsers$ = this.accountFacade.allUsers$;
 
-  constructor(private accountFacade: AccountFacade, private friendFacade : FriendFacade, private cdr : ChangeDetectorRef, private router : Router){
+  isLoading = false;
 
-  }
+  constructor(
+    private accountFacade: AccountFacade,
+    private friendFacade: FriendFacade,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private crd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-
-    if(localStorage.getItem('user') !== null){
+    if (localStorage.getItem('user') !== null) {
       this.currentUser = JSON.parse(localStorage.getItem('user')!);
 
       this.friendFacade.getAllFriendRequests(this.currentUser?.userName);
@@ -48,83 +53,101 @@ export class FriendRequestsComponent implements OnInit {
       this.friendFacade.getAllUsers(this.currentUser.userName);
 
       this.allUser$.subscribe({
-        next:(users?:ApplicationUser[])=>{
-          console.log(users)
+        next: (users?: ApplicationUser[]) => {
+          console.log(users);
           this.allUsersThatRequested = users!;
           this.totalRecords = users!.length;
 
           this.updateDisplayedUsers();
+        },
+      });
 
-        }
-      })
-
-
-    }else{
-      console.log("Nothing in local storage");
+      this.accountFacade.allUsers(this.currentUser.userName);
+    } else {
+      console.log('Nothing in local storage');
     }
-
-
   }
 
-  addFriend(userName:string){
+  addFriend(userName: string) {
+    this.isLoading = true;
     this.friendFacade.confirmFriendRequest(this.currentUser.userName, userName);
 
-    window.location.reload();
+    setTimeout(()=>{
+      const currentUrl = this.router.url;
+      this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+          this.router.navigate([currentUrl]);
+      });
+      this.isLoading = false;
+    },3000)
   }
 
-  denyFriend(userName:string){
+  denyFriend(userName: string) {
 
-
+    this.isLoading = true;
 
     this.friendRequest$.subscribe({
-      next:(frs?:FriendRequest[])=>{
-        frs?.forEach((fr)=>{
-          if(fr.userName === userName){
-
-            this.friendFacade.denyFriendRequest(this.currentUser.userName, userName);
+      next: (frs?: FriendRequest[]) => {
+        frs?.forEach((fr) => {
+          if (fr.userName === userName) {
+            this.friendFacade.denyFriendRequest(
+              this.currentUser.userName,
+              userName
+            );
 
             this.friendFacade.getAllUsers(this.currentUser.userName);
 
-      this.allUser$.subscribe({
-        next:(users?:ApplicationUser[])=>{
-          console.log(users)
-          this.allUsersThatRequested = users!;
-          this.totalRecords = users!.length;
+            this.allUser$.subscribe({
+              next: (users?: ApplicationUser[]) => {
+                console.log(users);
+                this.allUsersThatRequested = users!;
+                this.totalRecords = users!.length;
 
-          this.updateDisplayedUsers();
+                this.updateDisplayedUsers();
+              },
+            });
 
-        }
-      })
-
-            window.location.reload();
+            setTimeout(()=>{
+              const currentUrl = this.router.url;
+              this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
+                  this.router.navigate([currentUrl]);
+              });
+              this.isLoading = false;
+            },3000)
           }
-        })
-      }
-    })
-
-
+        });
+      },
+    });
   }
 
   updateDisplayedFriendRequests() {
     const start = this.currentPage * this.rowsPerPage;
-    this.allFriendRequestsPaginated = this.allUsersThatRequested.slice(start, start + this.rowsPerPage);
+    this.allFriendRequestsPaginated = this.allUsersThatRequested.slice(
+      start,
+      start + this.rowsPerPage
+    );
   }
 
   updateDisplayedUsers() {
     const start = this.currentPage * this.rowsPerPage;
 
-    this.allUser$.pipe(take(1)).subscribe(users => {
-      if(users !== undefined)
-      this.displayedUsers = users.slice(start, start + this.rowsPerPage);
+    this.allUser$.pipe(take(1)).subscribe((users) => {
+      if (users !== undefined)
+        this.displayedUsers = users.slice(start, start + this.rowsPerPage);
     });
   }
 
-  paginate(event:any) {
+  paginate(event: any) {
     this.currentPage = event.page;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.updateDisplayedUsers();
-    })
+    });
     this.cdr.detectChanges();
   }
+
+  backToMain() {
+    this.router.navigateByUrl('/');
+  }
+
+
 
 }

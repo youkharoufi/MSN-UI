@@ -4,6 +4,12 @@
 <p-toast key="registerError" [life]="5000"></p-toast>
 <p-toast key="FriendRequestError" [life]="5000"></p-toast>
 
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="card">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+</div>
+
 <p-toolbar>
   <div class="p-toolbar-group-start">
     <p-button label="Friend Requests" (click)="redirectToFriendRequests()" icon="pi pi-users" styleClass="p-button-warning" [badge]="(friendRequestsCount$ | async)?.toString()" badgeClass="p-badge-danger"></p-button>

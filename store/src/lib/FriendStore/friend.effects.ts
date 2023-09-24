@@ -125,6 +125,23 @@ export class FriendEffects {
       )
   );
 
+  getAllFriend$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FriendActions.getAllFriends),
+      switchMap((action) =>
+        this.backend.getAllFriends(action.currentUserName).pipe(
+            map((allFriends: ApplicationUser[]) =>
+              FriendActions.getAllFriendsSuccess({ allFriends })
+            ),
+            catchError((error) =>
+              of(FriendActions.getAllFriendsFailure({ error }))
+            )
+
+        )
+      )
+      )
+  );
+
 
 
   constructor(private actions$: Actions, private backend: FriendService, private messageService : MessageService) { }

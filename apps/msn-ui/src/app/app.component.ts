@@ -8,5 +8,6 @@ import { MenuItem } from 'primeng/api';
 })
 export class AppComponent {
 
+  public isLoading = false;
 
 }

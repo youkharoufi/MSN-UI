@@ -62,7 +62,7 @@ export class MenuComponent implements OnInit{
     friends: [],
   };
 
-  currentUserWithFriends : ApplicationUser | undefined;
+  currentUserWithFriends?: ApplicationUser;
 
   messageContent = '';
 
@@ -88,6 +88,12 @@ export class MenuComponent implements OnInit{
 
   targetU!: ApplicationUser;
 
+  currentUser?: ApplicationUser;
+
+  loggedUser$ = this.accountFacade.loggedUser$;
+
+  allFriend$ = this.friendFacade.allFriend$;
+
   constructor(
     private accountFacade: AccountFacade,
     public messageFacade: MessageFacade,
@@ -99,9 +105,18 @@ export class MenuComponent implements OnInit{
   }
 
    ngOnInit(): void {
-    this.accountFacade.allUsers();
 
-    this.currentUserWithFriends = JSON.parse(localStorage.getItem('user')!);
+
+
+    if(localStorage.getItem('user') !== null){
+
+      this.currentUserWithFriends = JSON.parse(localStorage.getItem('user')!)
+
+
+
+      this.friendFacade.getAllFriends(this.currentUserWithFriends!.userName);
+
+      this.accountFacade.allUsers(this.currentUserWithFriends!.userName);
 
 
       this.allUsers$.subscribe({
@@ -112,13 +127,14 @@ export class MenuComponent implements OnInit{
         },
       });
 
+    }else{
+      console.log("No connected User")
+    }
+
 
 
 
   }
-
-
-
 
   private scrollToBottom(): void {
     try {

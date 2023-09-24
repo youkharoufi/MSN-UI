@@ -78,7 +78,8 @@ export const confirmAccountFailure = createAction(
 );
 
 export const allUsers = createAction(
-  AccountActionsTypes.GET_ALL_USERS
+  AccountActionsTypes.GET_ALL_USERS,
+  props<{ currentUsername: string }>()
 );
 
 export const allUsersSuccess = createAction(

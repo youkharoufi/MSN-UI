@@ -85,6 +85,8 @@ export class MainPageComponent{
 
   friendRequestsCount$ = this.friendFacade.count$;
 
+  isLoading = false;
+
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -104,6 +106,8 @@ export class MainPageComponent{
       const currentUser : ApplicationUser =JSON.parse(localStorage.getItem('user')!);
 
       this.friendFacade.getFriendRequestsCount(currentUser.userName);
+      this.crd.detectChanges();
+
 
     }else{
       this.friendRequestsCount$ = of(0);
@@ -118,6 +122,7 @@ export class MainPageComponent{
   }
 
   logoutUser(){
+    this.isLoading = true;
     localStorage.removeItem('user');
 
     this.crd.detectChanges();
@@ -135,6 +140,7 @@ export class MainPageComponent{
       this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
           this.router.navigate([currentUrl]);
       });
+      this.isLoading = false;
     },3000)
 
 
@@ -151,11 +157,13 @@ export class MainPageComponent{
 
   login() {
 
+    this.isLoading = true;
 
     this.messageService.clear();
 
     this.accountFacade.login(this.loginUser);
 
+    this.crd.detectChanges();
 
     //   this.messageService.add({
     //   key: 'login',
@@ -169,6 +177,7 @@ export class MainPageComponent{
       this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
           this.router.navigate([currentUrl]);
       });
+      this.isLoading = false;
     },3000)
 
     this.loginDialog = false;
@@ -193,6 +202,7 @@ export class MainPageComponent{
 
   register() {
 
+    this.isLoading = true;
     this.messageService.clear();
 
     this.registerUser.role = this.role.name;
@@ -223,6 +233,7 @@ export class MainPageComponent{
     const currentUrl = this.router.url;
     this.router.navigateByUrl('/email-confirmation', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
+        this.isLoading = false;
     });
 
     this.registerDialog = false;

@@ -30,8 +30,8 @@ export class AccountService {
     return this.http.post<ApplicationUser>(this.baseUrl+'account/email-confirmation', confEmail);
   }
 
-  getAllUsers(): Observable<ApplicationUser[]>{
-    return this.http.get<ApplicationUser[]>(this.baseUrl+"account/all-users");
+  getAllUsers(currentUsername:string): Observable<ApplicationUser[]>{
+    return this.http.get<ApplicationUser[]>(this.baseUrl+"account/all-users/"+currentUsername);
   }
 
   connectedUser(username:string): Observable<ApplicationUser>{

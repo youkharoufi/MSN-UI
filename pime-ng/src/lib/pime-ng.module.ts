@@ -16,6 +16,7 @@ import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { PaginatorModule } from 'primeng/paginator';
 import { BadgeModule } from 'primeng/badge';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { BadgeModule } from 'primeng/badge';
     CardModule,
     ScrollPanelModule,
     PaginatorModule,
-    BadgeModule
+    BadgeModule,
+    ProgressSpinnerModule
   ],
   exports: [
     ToolbarModule,
@@ -53,7 +55,8 @@ import { BadgeModule } from 'primeng/badge';
     CardModule,
     ScrollPanelModule,
     PaginatorModule,
-    BadgeModule
+    BadgeModule,
+    ProgressSpinnerModule
   ],
 })
 export class PimeNgModule {}

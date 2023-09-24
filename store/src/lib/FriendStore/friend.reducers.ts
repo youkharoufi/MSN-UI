@@ -14,7 +14,8 @@ export interface State extends EntityState<ApplicationUser> {
   error?: Error | null;
   count?: number;
   friendRequests?: FriendRequest[];
-  allUsers?:ApplicationUser[]
+  allUsers?:ApplicationUser[],
+  allFriends?:ApplicationUser[]
 }
 
 export interface FriendPartialState {
@@ -30,7 +31,8 @@ export const initialState: State = friendAdapter.getInitialState({
   user:undefined,
   number:0,
   friendRequest:[],
-  allUsers:[]
+  allUsers:[],
+  allFriends:[]
 });
 
 
@@ -138,6 +140,20 @@ export const friendReducer = createReducer(
     ({ ...state, loaded: true, allUsers })
   ),
   on(FriendActions.getAllUsersFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  on(FriendActions.getAllFriends, (state, { currentUserName}) => ({
+    ...state,
+    loaded: false,
+    error: null,
+    currentUserName,
+  })),
+  on(FriendActions.getAllFriendsSuccess, (state, { allFriends }) =>
+    ({ ...state, loaded: true, allFriends })
+  ),
+  on(FriendActions.getAllFriendsFailure, (state, { error }) => ({
     ...state,
     error,
   })),

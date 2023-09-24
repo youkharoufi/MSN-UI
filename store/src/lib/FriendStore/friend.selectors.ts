@@ -20,6 +20,11 @@ export const getFriendCount = createSelector(
   (state: State) => state.count
 );
 
+export const getAllFriends = createSelector(
+  getFriendState,
+  (state: State) => state.allFriends
+);
+
 export const getAllUsersFR = createSelector(
   getFriendState,
   (state: State) => state.allUsers

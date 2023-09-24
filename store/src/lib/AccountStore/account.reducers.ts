@@ -33,7 +33,8 @@ export const accountAdapter: EntityAdapter<ApplicationUser> =
 export const initialState: State = accountAdapter.getInitialState({
   // set initial required properties
   loaded: false,
-  user:undefined
+  user:undefined,
+  loggedUser:undefined
 });
 
 
@@ -84,10 +85,11 @@ export const accountReducer = createReducer(
     error,
   })),
 
-  on(AccountActions.allUsers, (state) => ({
+  on(AccountActions.allUsers, (state, {currentUsername}) => ({
     ...state,
     loaded: false,
-    error: null
+    error: null,
+    currentUsername
   })),
   on(AccountActions.allUsersSuccess, (state, { users }) =>
   accountAdapter.upsertMany(users,{ ...state, loaded: true })

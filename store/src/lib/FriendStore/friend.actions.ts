@@ -36,6 +36,11 @@ export enum FriendActionsTypes {
   GET_ALL_USERS_SUCCESS = '[Friend/API] Get All Users',
   GET_ALL_USERS_ERROR = '[Friend/API] Get All Users Failure',
 
+
+  GET_ALL_FRIENDS = '[Friend] Get All Friends',
+  GET_ALL_FRIENDS_SUCCESS = '[Friend/API] Get All Users',
+  GET_ALL_FRIENDS_ERROR = '[Friend/API] Get All Users Failure',
+
 }
 
 export const sendFriendRequest = createAction(
@@ -139,6 +144,21 @@ export const getAllUsersSuccess = createAction(
 );
 
 export const getAllUsersFailure = createAction(
+  FriendActionsTypes.GET_ALL_USERS_ERROR,
+  props<{ error: Error | any }>()
+);
+
+export const getAllFriends = createAction(
+  FriendActionsTypes.GET_ALL_USERS,
+  props<{ currentUserName: string }>()
+);
+
+export const getAllFriendsSuccess = createAction(
+  FriendActionsTypes.GET_ALL_USERS_SUCCESS,
+  props<{ allFriends: ApplicationUser[] }>()
+);
+
+export const getAllFriendsFailure = createAction(
   FriendActionsTypes.GET_ALL_USERS_ERROR,
   props<{ error: Error | any }>()
 );
