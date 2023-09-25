@@ -1,11 +1,37 @@
+.main-content{
+  background: linear-gradient(to Right, black, grey) !important;
+  padding-top:25px;
+}
 
+::ng-deep .p-card {
+  background: #ffffff;
+  color: #495057;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
 
-
-
+::ng-deep .p-tabview .p-tabview-panels {
+  background: linear-gradient(45deg, purple, yellow) !important;
+  padding: 1.25rem;
+  border: 0 none;
+  color: #495057;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
 
 ::ng-deep .p-scrollpanel .p-scrollpanel-bar {
   background: rgb(79, 79, 175) !important;
   border: 0 none;
+}
+
+.p-tabview-nav-content {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior: contain auto;
+  background: linear-gradient(to Right, purple, yellow) !important;
 }
 
 .scroll-container {
@@ -25,9 +51,19 @@
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 20px !important;  /* adjust for desired spacing between cards */
+  justify-content: center;
 }
 
 
+::ng-deep .p-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  color: white;
+  background: linear-gradient(to Right, black, grey) !important;
+  border: opacify($color: #000000, $amount: 0.9)
+}
 
 
 *{

@@ -10,6 +10,13 @@
   width:550px !important;
 }
 
+::ng-deep .p-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: linear-gradient(to Right, purple, yellow) !important;}
+
 .loading-overlay {
   position: fixed;
   top: 0;

@@ -1,12 +1,13 @@
 <p-tabView styleClass="tabview-custom">
-  <p-tabPanel header="Header I">
+  <p-tabPanel header="All Users">
+    <div class="main-content">
+
     <ng-template pTemplate="header">
       <i class="pi pi-user"></i>
       <span>All Users</span>
     </ng-template>
-
     <span>
-      <div style="margin-bottom:10px">
+      <div style="display:flex; margin-bottom:10px; justify-content: center">
         <input type="text" placeholder="Search By Username" pInputText [(ngModel)]="searchForFriends" (ngModelChange)="dynamicFiltering()" />
         <p-button label="Search" (click)="launchFiltering()" styleClass="p-button-success"></p-button>
       </div>
@@ -17,7 +18,7 @@
         *ngFor="let user of allUsers"
         [header]="user.userName"
         [subheader]="user.email"
-        [style]="{ width: '300px' }"
+        [style]="{ width: '300px'}"
       >
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
@@ -42,8 +43,8 @@
      <div class="card flex justify-content-center">
       <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords!" (onPageChange)="paginate($event)"></p-paginator>
     </div>
+  </div>
   </p-tabPanel>
-
 
   <p-tabPanel header="Header II">
     <ng-template pTemplate="header">
