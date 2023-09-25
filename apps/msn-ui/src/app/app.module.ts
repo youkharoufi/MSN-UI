@@ -16,6 +16,7 @@ import { MenuComponent } from './menu/menu.component';
 import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
 import { MsnDomainModule } from '@msn-ui/store';
 import { HttpLoadingInterceptor } from './Interceptors/http-loading.interceptor';
+import { SearchForFriendsPipe } from './pipes/search-for-friends.pipe';
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
     EmailConfirmationComponent,
     MenuComponent,
     FriendRequestsComponent,
+    SearchForFriendsPipe,
   ],
   imports: [
     BrowserModule,
@@ -43,8 +45,18 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
   ],
-  providers: [ConfirmationService, MessageService, MenuComponent, AppComponent,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true, deps: [AppComponent] }],
+  providers: [
+    ConfirmationService,
+    MessageService,
+    MenuComponent,
+    AppComponent,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpLoadingInterceptor,
+      multi: true,
+      deps: [AppComponent],
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

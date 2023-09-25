@@ -152,6 +152,23 @@ export class AccountEffects {
     )
   );
 
+  getUsersByFilter$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountActions.getUsersByFilter),
+      switchMap((action) =>
+        this.backend.getUsersByFilter(action.search).pipe(
+          map((filteredUsers:ApplicationUser[]) =>
+            AccountActions.getUsersByFilterSuccess({ filteredUsers })
+          ),
+          catchError((error) =>
+            of(AccountActions.getUsersByFilterFailure({ error }))
+          )
+
+        )
+      )
+    )
+  );
+
   constructor(private actions$: Actions, private backend: AccountService, private messageService : MessageService) { }
 
         }

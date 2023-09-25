@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Update } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
 
-import { allUsers, allUsersSuccess, confirmAccount, connectedUser, getUserByUsername, loginAccount, registerAccount } from './account.actions';
+import { allUsers, confirmAccount, connectedUser, getUserByUsername, getUsersByFilter, loginAccount, registerAccount } from './account.actions';
 import * as fromAccount from './account.reducers';
 import * as AccountSelectors from './account.selectors';
 import { LoginUser } from '../Entities/loginUser';
@@ -22,6 +20,7 @@ export class AccountFacade {
     })
   );
   loggedUser$ = this.store.pipe(select(AccountSelectors.selectLoggedUser));
+  filteredUsers$ = this.store.pipe(select(AccountSelectors.selectFilteredUsers))
 
 
   constructor(private store: Store<fromAccount.AccountPartialState>) { }
@@ -48,6 +47,10 @@ export class AccountFacade {
 
   getUserByUserName(userName:string){
     this.store.dispatch(getUserByUsername({userName}));
+  }
+
+  getUsersByFilter(search:string){
+    this.store.dispatch(getUsersByFilter({search}))
   }
 
 }

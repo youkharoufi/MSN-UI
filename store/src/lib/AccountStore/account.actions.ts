@@ -30,6 +30,10 @@ export enum AccountActionsTypes {
   GET_USER_BY_USERNAME = '[Account] Get User by userName',
   GET_USER_BY_USERNAME_SUCCESS = '[Account/API] Get User by userName Success',
   GET_USER_BY_USERNAME_ERROR = '[Account/API] Get User by userName Failure',
+
+  GET_USERS_BY_FILTER = '[Account] Get User by Filter',
+  GET_USERS_BY_FILTER_SUCCESS = '[Account/API] Get User by Filter Success',
+  GET_USERS_BY_FILTER_ERROR = '[Account/API] Get User by Filter Failure',
 }
 
 export const loginAccount = createAction(
@@ -119,6 +123,21 @@ export const getUserByUsernameSuccess = createAction(
 
 export const getUserByUsernameFailure = createAction(
   AccountActionsTypes.GET_USER_BY_USERNAME_ERROR,
+  props<{ error: Error | any }>()
+);
+
+export const getUsersByFilter = createAction(
+  AccountActionsTypes.GET_USERS_BY_FILTER,
+  props<{ search: string }>()
+);
+
+export const getUsersByFilterSuccess = createAction(
+  AccountActionsTypes.GET_USERS_BY_FILTER_SUCCESS,
+  props<{ filteredUsers: ApplicationUser[] }>()
+);
+
+export const getUsersByFilterFailure = createAction(
+  AccountActionsTypes.GET_USERS_BY_FILTER_ERROR,
   props<{ error: Error | any }>()
 );
 

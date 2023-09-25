@@ -21,6 +21,7 @@ export interface State extends EntityState<ApplicationUser> {
   connectedUser?: ApplicationUser;
   userName?:string;
   byUsernameUser?: ApplicationUser;
+  filteredUsers?: ApplicationUser[];
 }
 
 export interface AccountPartialState {
@@ -34,7 +35,8 @@ export const initialState: State = accountAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   user:undefined,
-  loggedUser:undefined
+  loggedUser:undefined,
+  filteredUsers:undefined
 });
 
 
@@ -122,6 +124,20 @@ export const accountReducer = createReducer(
     ({ ...state, loaded: true, byUsernameUser })
   ),
   on(AccountActions.getUserByUsernameFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  on(AccountActions.getUsersByFilter, (state, {search}) => ({
+    ...state,
+    loaded: false,
+    error: null,
+    search
+  })),
+  on(AccountActions.getUsersByFilterSuccess, (state, { filteredUsers }) =>
+    ({ ...state, loaded: true, filteredUsers })
+  ),
+  on(AccountActions.getUsersByFilterFailure, (state, { error }) => ({
     ...state,
     error,
   })),

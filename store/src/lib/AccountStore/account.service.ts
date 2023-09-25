@@ -42,5 +42,8 @@ export class AccountService {
     return this.http.get<ApplicationUser>(this.baseUrl+"account/get-user-by-username/"+userName);
   }
 
+  getUsersByFilter(search:string): Observable<ApplicationUser[]>{
+    return this.http.get<ApplicationUser[]>(this.baseUrl+"account/filter-by-input/"+search);
+  }
 
 }

@@ -1,3 +1,4 @@
+import { allUsers } from './../../../../../store/src/lib/AccountStore/account.actions';
 import { FriendFacade } from './../../../../../store/src/lib/FriendStore/friend.facade';
 import { MessageFacade } from './../../../../../store/src/lib/MessageStore/message.facade';
 import {
@@ -72,11 +73,11 @@ export class MenuComponent implements OnInit{
 
   showChatFlow = false;
 
-  allUsers!: ApplicationUser[];
+  allUsers?: ApplicationUser[];
 
   allOfTheUsers!: ApplicationUser[];
 
-  totalRecords!: number;
+  totalRecords?: number;
   currentPage = 0;
   rowsPerPage = 4;
 
@@ -93,6 +94,11 @@ export class MenuComponent implements OnInit{
   loggedUser$ = this.accountFacade.loggedUser$;
 
   allFriend$ = this.friendFacade.allFriend$;
+
+  searchForFriends!: string;
+  originalUsers: any[] =[];
+
+  filteredUsers$ = this.accountFacade.filteredUsers$;
 
   constructor(
     private accountFacade: AccountFacade,
@@ -116,12 +122,12 @@ export class MenuComponent implements OnInit{
 
       this.friendFacade.getAllFriends(this.currentUserWithFriends!.userName);
 
-      this.accountFacade.allUsers(this.currentUserWithFriends!.userName);
+      this.accountFacade.getUsersByFilter(this.searchForFriends);
 
 
-      this.allUsers$.subscribe({
-        next: (users: ApplicationUser[]) => {
-          this.totalRecords = users.length;
+      this.filteredUsers$.subscribe({
+        next: (users?: ApplicationUser[]) => {
+          this.totalRecords = users?.length;
           this.updateDisplayedUsers();
 
         },
@@ -194,10 +200,12 @@ export class MenuComponent implements OnInit{
   updateDisplayedUsers() {
     const start = this.currentPage * this.rowsPerPage;
 
-    this.allUsers$.pipe(take(1)).subscribe(users => {
-      this.allUsers = users.slice(start, start + this.rowsPerPage);
+
+    this.filteredUsers$.pipe(take(1)).subscribe(users => {
+      this.allUsers = users?.slice(start, start + this.rowsPerPage);
     });
   }
+
 
   paginate(event:any) {
     this.currentPage = event.page;
@@ -207,9 +215,69 @@ export class MenuComponent implements OnInit{
     this.cdr.detectChanges();
   }
 
-
   openModal(user:ApplicationUser){
     this.targetU = user;
     this.visible = true;
+  }
+
+  dynamicFiltering(){
+    if(this.searchForFriends === '' || this.searchForFriends === undefined || this.searchForFriends === null){
+      this.searchForFriends = "All";
+      this.accountFacade.getUsersByFilter(this.searchForFriends);
+
+
+      this.filteredUsers$.subscribe({
+        next: (users?: ApplicationUser[]) => {
+          this.totalRecords = users?.length;
+          this.updateDisplayedUsers();
+
+        },
+      });
+
+    }else{
+      this.accountFacade.getUsersByFilter(this.searchForFriends);
+
+      this.filteredUsers$.subscribe({
+          next:(value: ApplicationUser[] | undefined)=>{
+            const start = this.currentPage * this.rowsPerPage;
+            this.allUsers = value?.slice(start, start + this.rowsPerPage);
+
+          }
+      })
+
+    }
+
+
+  }
+
+  launchFiltering(){
+
+    if(this.searchForFriends === '' || this.searchForFriends === undefined || this.searchForFriends === null){
+      this.searchForFriends = "All";
+      this.accountFacade.getUsersByFilter(this.searchForFriends);
+
+
+      this.filteredUsers$.subscribe({
+        next: (users?: ApplicationUser[]) => {
+          this.totalRecords = users?.length;
+          this.updateDisplayedUsers();
+
+        },
+      });
+
+    }else{
+      this.accountFacade.getUsersByFilter(this.searchForFriends);
+
+      this.filteredUsers$.subscribe({
+          next:(value: ApplicationUser[] | undefined)=>{
+            const start = this.currentPage * this.rowsPerPage;
+            this.allUsers = value?.slice(start, start + this.rowsPerPage);
+
+          }
+      })
+
+    }
+
+
   }
 }

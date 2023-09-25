@@ -5,6 +5,13 @@
       <span>All Users</span>
     </ng-template>
 
+    <span>
+      <div style="margin-bottom:10px">
+        <input type="text" placeholder="Search By Username" pInputText [(ngModel)]="searchForFriends" (ngModelChange)="dynamicFiltering()" />
+        <p-button label="Search" (click)="launchFiltering()" styleClass="p-button-success"></p-button>
+      </div>
+    </span>
+
     <div class="card-container" >
         <p-card
         *ngFor="let user of allUsers"
@@ -33,7 +40,7 @@
      </div>
 
      <div class="card flex justify-content-center">
-      <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+      <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords!" (onPageChange)="paginate($event)"></p-paginator>
     </div>
   </p-tabPanel>
 
