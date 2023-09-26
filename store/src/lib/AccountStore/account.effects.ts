@@ -50,10 +50,18 @@ export class AccountEffects {
   this.actions$.pipe(
     ofType(AccountActions.loginAccountFailure),
     tap(() => {
-      console.log("mermelak");
       this.messageService.add({key:"loginError", severity:'error', summary: 'Error', detail: 'Login Failed! Invalid credentials'});
     })
   ), { dispatch: false }
+);
+
+showLoginSuccess$ = createEffect(() =>
+this.actions$.pipe(
+  ofType(AccountActions.loginAccountSuccess),
+  tap(() => {
+    this.messageService.add({key:"loginSuccess", severity:'success', summary: 'Success', detail: 'You are logged in successfully !'});
+  })
+), { dispatch: false }
 );
 
 
@@ -79,7 +87,16 @@ export class AccountEffects {
     ofType(AccountActions.registerAccountFailure),
     tap(() => {
       console.log("mermelak");
-      this.messageService.add({key:"registerError", severity:'error', summary: 'Error', detail: 'Registration Failed, please try again later'});
+      this.messageService.add({key:"registerSuccess", severity:'success', summary: 'Success', detail: 'You have been registered successfully !'});
+    })
+  ), { dispatch: false }
+);
+
+showRegisterSuccess$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AccountActions.registerAccountSuccess),
+    tap(() => {
+      this.messageService.add({key:"registerSuccess", severity:'error', summary: 'Error', detail: 'Registration Failed, please try again later'});
     })
   ), { dispatch: false }
 );

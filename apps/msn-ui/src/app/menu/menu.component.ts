@@ -95,7 +95,7 @@ export class MenuComponent implements OnInit{
 
   allFriend$ = this.friendFacade.allFriend$;
 
-  searchForFriends!: string;
+  searchForFriends?: string;
   originalUsers: any[] =[];
 
   filteredUsers$ = this.accountFacade.filteredUsers$;
@@ -122,7 +122,7 @@ export class MenuComponent implements OnInit{
 
       this.friendFacade.getAllFriends(this.currentUserWithFriends!.userName);
 
-      this.accountFacade.getUsersByFilter(this.searchForFriends);
+      this.accountFacade.getUsersByFilter(this.searchForFriends!);
 
 
       this.filteredUsers$.subscribe({
@@ -153,9 +153,9 @@ export class MenuComponent implements OnInit{
 
   sendFriendRequest(){
 
-
-    console.log(this.targetU.userName);
     this.friendFacade.sendFriendRequest(this.currentUserWithFriends!.userName, this.targetU.userName);
+
+    this.visible = false;
 
   }
 
@@ -222,8 +222,8 @@ export class MenuComponent implements OnInit{
 
   dynamicFiltering(){
     if(this.searchForFriends === '' || this.searchForFriends === undefined || this.searchForFriends === null){
-      this.searchForFriends = "All";
-      this.accountFacade.getUsersByFilter(this.searchForFriends);
+      this.searchForFriends = undefined;
+      this.accountFacade.getUsersByFilter(this.searchForFriends!);
 
 
       this.filteredUsers$.subscribe({

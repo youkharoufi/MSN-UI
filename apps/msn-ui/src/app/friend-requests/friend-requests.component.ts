@@ -69,6 +69,7 @@ export class FriendRequestsComponent implements OnInit {
   }
 
   addFriend(userName: string) {
+    this.visibleA = false;
     this.isLoading = true;
     this.friendFacade.confirmFriendRequest(this.currentUser.userName, userName);
 
@@ -83,7 +84,9 @@ export class FriendRequestsComponent implements OnInit {
 
   denyFriend(userName: string) {
 
+    this.visibleB = false;
     this.isLoading = true;
+
 
     this.friendRequest$.subscribe({
       next: (frs?: FriendRequest[]) => {
@@ -115,6 +118,7 @@ export class FriendRequestsComponent implements OnInit {
             },3000)
           }
         });
+
       },
     });
   }

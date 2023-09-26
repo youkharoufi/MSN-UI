@@ -1,3 +1,9 @@
+<p-toast key="denyFriendReq" [life]="5000"></p-toast>
+<p-toast key="acceptFriendReq" [life]="5000"></p-toast>
+<p-toast key="friendReqSent" [life]="5000"></p-toast>
+
+
+
 <p-tabView styleClass="tabview-custom">
   <p-tabPanel header="All Users">
     <div class="main-content">
@@ -9,7 +15,6 @@
     <span>
       <div style="display:flex; margin-bottom:10px; justify-content: center">
         <input type="text" placeholder="Search By Username" pInputText [(ngModel)]="searchForFriends" (ngModelChange)="dynamicFiltering()" />
-        <p-button label="Search" (click)="launchFiltering()" styleClass="p-button-success"></p-button>
       </div>
     </span>
 
