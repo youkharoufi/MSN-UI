@@ -9,36 +9,37 @@
 
 To start the development server run `nx serve MSN-UI`. Open your browser and navigate to http://localhost:4200/. Happy coding!
 
-# Dating App
+# MSN
 
-Dating App is (as stated) a dating application in which you can as a user see other people's profiles, pictures, description, age [...]. You can also chat with the users via a SignalR powered.
-You can also filter your search based on : age, gender, new users [...].
+MSN is a chat application in which you can as a user send friend requests, accept or deny them, and chat with your friends via a SignalR based chat.
 
-SqLite is mandatory in order to host the seed data users. 
+## Installation
+To start using the app, all you have to do is in the Package Manager Console:
 
-This is a Frontend application, meaning that it works in pair with the DatingApp-API backend API which you can find in my repositories.
+```
+add-migration InitialMigration
+update-database
+```
+
+This is a frontend application, which means that it works in pair with the MSN-API backend API. You can find MSN-API in my repositories.
 
 ## Usage
 
 You can see that there are seed users already to help you use the app without having to register with your actual email address.
-If you identify as a man, login with these credentials (prepared for showing purposes) : 
-
-```json
-username:juarez
-password:Pa$$w0rd
-```
-
-If you identify as a woman, login with these credentials (prepared for showing purposes) : 
-
-```json
-username:anne
-password:Pa$$w0rd
-```
+If you do choose to register with your email address, you will receive a confirmation email with a link that you will have
+to click in order to use the app.
 
 ## Rules
 
-There are no specific rules except to enjoy :) 
+You can only chat once you have sent an invitation (or friend request) and accepted it with the receiving user. You can connect to all 3 
+of the seeded users by entering their usernames (Youssef, Henry and Estelle). As for the password, it is the same for all 3 users : 1234
 
+Example : 
+
+```
+username:Henry
+password:1234
+```
 
 ## Generate code
 
