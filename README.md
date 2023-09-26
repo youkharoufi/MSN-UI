@@ -14,11 +14,16 @@ To start the development server run `nx serve MSN-UI`. Open your browser and nav
 MSN is a chat application in which you can as a user send friend requests, accept or deny them, and chat with your friends via a SignalR based chat.
 
 ## Installation
-To start using the app, all you have to do is in the Package Manager Console:
+To start using the app, you first have to open a terminal and enter : 
 
 ```
-add-migration InitialMigration
-update-database
+npm install --legacy-peer-deps
+```
+
+Then run :
+
+```
+npm start
 ```
 
 This is a frontend application, which means that it works in pair with the MSN-API backend API. You can find MSN-API in my repositories.
